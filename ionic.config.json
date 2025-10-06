@@ -1,0 +1,7 @@
+{
+  "name": "finansmart",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
