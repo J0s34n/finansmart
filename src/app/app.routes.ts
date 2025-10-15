@@ -119,5 +119,13 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard.page').then( m => m.DashboardPage)
+  },
+  {
+    path: 'add-transaction',
+    loadComponent: () => import('./features/transactions/pages/add-transaction/add-transaction.page').then( m => m.AddTransactionPage)
+  },
+  {
+    path: 'transactions',
+    loadComponent: () => import('./features/transactions/pages/transactions/transactions.page').then( m => m.TransactionsPage)
   }
 ];

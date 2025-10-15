@@ -1,0 +1,255 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Transacciones</ion-title>
+    <ion-button slot="end" fill="clear" (click)="showFilters = true">
+      <ion-icon name="filter-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+
+  <!-- Search Bar -->
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar transacción..."
+      [(ngModel)]="searchText"
+      (ionInput)="onSearchChange($event)"
+      debounce="300">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($any($event))">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Filtros Activos -->
+  <div class="active-filters" *ngIf="hasActiveFilters()">
+    <ion-chip *ngIf="selectedType !== 'all'" outline>
+      <ion-label>{{ selectedType === 'expense' ? '💰 Gastos' : '📈 Ingresos' }}</ion-label>
+      <ion-icon name="close-outline" (click)="selectedType = 'all'; applyFilters()"></ion-icon>
+    </ion-chip>
+    <ion-chip *ngIf="selectedCategory !== 'all'" outline>
+      <ion-label>{{ (categories | json) }}</ion-label>
+      <ion-icon name="close-outline" (click)="selectedCategory = 'all'; applyFilters()"></ion-icon>
+    </ion-chip>
+    <ion-chip outline (click)="resetFilters()">
+      <ion-label>Limpiar Filtros</ion-label>
+    </ion-chip>
+  </div>
+
+  <!-- Lista de Transacciones -->
+  <div class="transactions-list" *ngIf="hasTransactions()">
+    <div class="transactions-header">
+      <span class="count">{{ getTransactionCount() }}</span>
+    </div>
+
+    <ion-list lines="none">
+      <ion-item-sliding 
+        *ngFor="let transaction of getPaginatedTransactions(); let i = index"
+        [attr.data-index]="i">
+        
+        <!-- Transacción -->
+        <ion-item (click)="goToTransactionDetail(transaction)" button>
+          <div class="transaction-icon" slot="start" [style.background-color]="transaction.categoryColor">
+            <ion-icon [name]="transaction.categoryIcon || 'pricetag-outline'"></ion-icon>
+          </div>
+
+          <ion-label>
+            <h3>{{ transaction.description }}</h3>
+            <p>
+              <ion-badge [color]="transaction.type === 'income' ? 'success' : 'danger'">
+                {{ transaction.categoryName }}
+              </ion-badge>
+              • {{ getRelativeTime(transaction.date) }}
+            </p>
+          </ion-label>
+
+          <div class="transaction-amount" slot="end">
+            <span [class.income]="transaction.type === 'income'" [class.expense]="transaction.type === 'expense'">
+              {{ formatAmount(transaction.amount, transaction.type) }}
+            </span>
+          </div>
+        </ion-item>
+
+        <!-- Opciones de Deslizar -->
+        <ion-item-options side="end">
+          <ion-item-option color="warning" (click)="editTransaction(transaction, $event)">
+            <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="deleteTransaction(transaction, $event)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- Infinite Scroll (próximamente) -->
+    <!-- <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px">
+      <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+  </div>
+
+  <!-- Estado Vacío -->
+  <div class="empty-state" *ngIf="!loading && !hasTransactions()">
+    <ion-icon name="wallet-outline"></ion-icon>
+    <h3>No hay transacciones</h3>
+    <p *ngIf="hasActiveFilters()">
+      No se encontraron transacciones con los filtros aplicados
+    </p>
+    <p *ngIf="!hasActiveFilters()">
+      Comienza agregando tu primera transacción
+    </p>
+    <ion-button (click)="goToAddTransaction()" *ngIf="!hasActiveFilters()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Agregar Transacción
+    </ion-button>
+    <ion-button fill="outline" (click)="resetFilters()" *ngIf="hasActiveFilters()">
+      Limpiar Filtros
+    </ion-button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando transacciones...</p>
+  </div>
+
+  <!-- FAB Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToAddTransaction()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+<!-- Modal de Filtros -->
+<ion-modal 
+  [isOpen]="showFilters" 
+  (didDismiss)="closeFiltersModal()"
+  class="filters-modal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Filtros</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeFiltersModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+
+      <!-- Tipo de Transacción -->
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Tipo de Transacción</ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Todas</ion-label>
+          <ion-radio 
+            slot="start"
+            value="all"
+            [checked]="selectedType === 'all'"
+            (ionChange)="selectedType = 'all'; applyFilters()">
+          </ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Gastos</ion-label>
+          <ion-radio 
+            slot="start"
+            value="expense"
+            [checked]="selectedType === 'expense'"
+            (ionChange)="selectedType = 'expense'; applyFilters()">
+          </ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ingresos</ion-label>
+          <ion-radio 
+            slot="start"
+            value="income"
+            [checked]="selectedType === 'income'"
+            (ionChange)="selectedType = 'income'; applyFilters()">
+          </ion-radio>
+        </ion-item>
+      </ion-list>
+
+      <!-- Categoría -->
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Categoría</ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Todas</ion-label>
+          <ion-radio 
+            slot="start"
+            value="all"
+            [checked]="selectedCategory === 'all'"
+            (ionChange)="selectedCategory = 'all'; applyFilters()">
+          </ion-radio>
+        </ion-item>
+        <ion-item *ngFor="let category of categories">
+          <div class="category-radio-item">
+            <div class="category-badge" [style.background-color]="category.color">
+              <ion-icon [name]="category.icon"></ion-icon>
+            </div>
+            <ion-label>{{ category.name }}</ion-label>
+          </div>
+          <ion-radio 
+            slot="end"
+            [value]="category.id"
+            [checked]="selectedCategory === category.id"
+            (ionChange)="selectedCategory = category.id; applyFilters()">
+          </ion-radio>
+        </ion-item>
+      </ion-list>
+
+      <!-- Rango de Fechas -->
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Fecha</ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label position="floating">Desde</ion-label>
+          <ion-input 
+            type="date"
+            [(ngModel)]="dateFrom"
+            (ionChange)="applyFilters()">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Hasta</ion-label>
+          <ion-input 
+            type="date"
+            [(ngModel)]="dateTo"
+            (ionChange)="applyFilters()">
+          </ion-input>
+        </ion-item>
+      </ion-list>
+
+      <!-- Botones de Acción -->
+      <div class="filter-actions">
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="resetFilters()">
+          Limpiar Filtros
+        </ion-button>
+        <ion-button 
+          expand="block"
+          (click)="closeFiltersModal()">
+          Aplicar
+        </ion-button>
+      </div>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
