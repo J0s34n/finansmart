@@ -431,7 +431,7 @@ ion-fab {
 }
 
 @keyframes fadeInUp {
-    from {
+  from {
     opacity: 0;
     transform: translateY(20px);
   }
@@ -447,5 +447,155 @@ ion-fab {
   }
   to {
     opacity: 1;
+  }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+@media (max-width: 576px) {
+  .dashboard-container {
+    padding: 12px;
+  }
+
+  .greeting-section {
+    .greeting-content {
+      .avatar-container ion-avatar {
+        width: 48px;
+        height: 48px;
+
+        ion-icon {
+          font-size: 48px;
+        }
+      }
+
+      .greeting-text h2 {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .balance-card {
+    .balance-amount h1 {
+      font-size: 28px;
+    }
+
+    .balance-details .balance-item {
+      padding: 10px;
+
+      ion-icon {
+        font-size: 20px;
+      }
+
+      .item-content .item-amount {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .quick-actions .action-button {
+    padding: 12px 4px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    span {
+      font-size: 10px;
+    }
+  }
+
+  .budget-card .budget-overview {
+    flex-direction: column;
+
+    .budget-percentage {
+      width: 100%;
+    }
+  }
+}
+
+// ========================================
+// DARK MODE
+// ========================================
+@media (prefers-color-scheme: dark) {
+  .balance-card {
+    background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .quick-actions .action-button {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .budget-card .budget-overview .budget-percentage {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .greeting-section .month-indicator {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// ========================================
+// LOADING STATE
+// ========================================
+.loading-skeleton {
+  .skeleton-text {
+    height: 20px;
+    background: linear-gradient(
+      90deg,
+      var(--ion-color-light) 0%,
+      var(--ion-color-light-shade) 50%,
+      var(--ion-color-light) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// ========================================
+// TRANSITIONS
+// ========================================
+ion-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+ion-item {
+  transition: background-color 0.2s ease;
+
+  &:active {
+    --background: var(--ion-color-light);
+  }
+}
+
+// ========================================
+// CUSTOM SCROLLBAR (webkit)
+// ========================================
+ion-content::part(scroll) {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
   }
 }
