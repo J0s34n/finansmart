@@ -1,0 +1,286 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 56px); // Restar altura del header
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// ========================================
+// HEADER SECTION
+// ========================================
+.header-section {
+  text-align: center;
+  margin-bottom: 24px;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.logo-container {
+  margin-bottom: 16px;
+}
+
+.logo-icon {
+  font-size: 64px;
+  color: var(--ion-color-primary);
+}
+
+.app-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin: 8px 0;
+}
+
+.app-subtitle {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+// ========================================
+// CARD
+// ========================================
+.register-card {
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  animation: fadeInUp 0.6s ease-out;
+
+  ion-card-header {
+    padding-bottom: 10px;
+  }
+
+  ion-card-title {
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  ion-card-content {
+    padding: 20px;
+  }
+}
+
+// ========================================
+// FORM
+// ========================================
+form {
+  ion-item {
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+    }
+
+    ion-icon {
+      color: var(--ion-color-medium);
+      margin-right: 12px;
+    }
+  }
+
+  ion-input {
+    --padding-start: 0;
+  }
+}
+
+// ========================================
+// ERROR MESSAGES
+// ========================================
+.error-message {
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  animation: fadeIn 0.3s ease-out;
+
+  small {
+    display: block;
+  }
+}
+
+// ========================================
+// PASSWORD STRENGTH
+// ========================================
+.password-strength {
+  margin: 8px 12px 16px;
+  animation: fadeIn 0.3s ease-out;
+
+  .strength-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+
+    small {
+      font-size: 12px;
+      &:first-child {
+        color: var(--ion-color-medium);
+      }
+      &:last-child {
+        font-weight: 600;
+      }
+    }
+  }
+
+  .strength-bar {
+    height: 4px;
+    background-color: var(--ion-color-light);
+    border-radius: 2px;
+    overflow: hidden;
+
+    .strength-fill {
+      height: 100%;
+      transition: width 0.3s ease, background-color 0.3s ease;
+      border-radius: 2px;
+    }
+  }
+}
+
+// ========================================
+// TERMS SECTION
+// ========================================
+.terms-section {
+  margin: 16px 0;
+  text-align: center;
+
+  .terms-text {
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0;
+
+    .link {
+      color: var(--ion-color-primary);
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// ========================================
+// BUTTONS
+// ========================================
+.register-button {
+  margin-top: 20px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  --border-radius: 8px;
+
+  ion-spinner {
+    margin: 0 8px;
+  }
+}
+
+// ========================================
+// LOGIN SECTION
+// ========================================
+.login-section {
+  margin-top: 24px;
+  text-align: center;
+  width: 100%;
+  animation: fadeIn 0.8s ease-out;
+
+  p {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  ion-button {
+    --border-radius: 8px;
+    height: 48px;
+    font-weight: 600;
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+@media (max-width: 576px) {
+  .register-container {
+    padding: 16px;
+  }
+
+  .app-title {
+    font-size: 24px;
+  }
+
+  .logo-icon {
+    font-size: 56px;
+  }
+
+  .register-card ion-card-content {
+    padding: 16px;
+  }
+}
+
+// ========================================
+// DARK MODE
+// ========================================
+@media (prefers-color-scheme: dark) {
+  .register-card {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  form ion-item {
+    border-color: var(--ion-color-dark);
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+    }
+  }
+
+  .password-strength .strength-bar {
+    background-color: var(--ion-color-dark);
+  }
+}
