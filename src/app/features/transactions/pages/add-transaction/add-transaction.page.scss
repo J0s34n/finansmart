@@ -1,0 +1,271 @@
+.add-transaction-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+// ========================================
+// TYPE CARD (SEGMENTO)
+// ========================================
+.type-card {
+  margin-bottom: 20px;
+  border-radius: 16px;
+  animation: fadeInDown 0.4s ease-out;
+
+  ion-segment {
+    --background: transparent;
+    padding: 4px;
+
+    ion-segment-button {
+      --border-width: 0;
+      border: 2px solid var(--ion-color-light);
+      border-radius: 12px;
+      margin: 0 4px;
+      transition: all 0.2s ease;
+
+      &.segment-button-checked {
+        border-color: var(--ion-color-primary);
+        background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
+        color: white;
+
+        ion-icon {
+          color: white;
+        }
+      }
+
+      ion-icon {
+        font-size: 20px;
+        margin-right: 8px;
+        color: var(--ion-color-medium);
+        transition: color 0.2s ease;
+      }
+
+      span {
+        font-weight: 600;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// ========================================
+// FORM CARDS
+// ========================================
+.form-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.4s ease-out;
+
+  ion-card-header {
+    padding-bottom: 10px;
+
+    ion-card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  ion-card-content {
+    padding: 16px;
+  }
+
+  ion-item {
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+      --highlight-color-valid: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+      --highlight-color-invalid: var(--ion-color-danger);
+    }
+
+    ion-input,
+    ion-textarea,
+    ion-select {
+      --padding-start: 0;
+    }
+  }
+}
+
+// ========================================
+// ERROR MESSAGES
+// ========================================
+.error-message {
+  padding: 4px 12px;
+  margin-top: 8px;
+  animation: fadeIn 0.3s ease-out;
+
+  small {
+    display: block;
+  }
+}
+
+// ========================================
+// CATEGORÍA PREVIEW
+// ========================================
+.category-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--ion-color-light);
+
+  .category-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+
+  .category-details {
+    flex: 1;
+
+    .category-name {
+      font-size: 16px;
+      font-weight: 600;
+      display: block;
+    }
+  }
+}
+
+// ========================================
+// RECIBO
+// ========================================
+.receipt-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  ion-button {
+    height: 100px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    span {
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+}
+
+.receipt-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .receipt-image-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--ion-color-light);
+
+    .receipt-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+
+    ion-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      --padding-start: 0;
+      --padding-end: 0;
+      margin: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.5);
+
+      ion-icon {
+        font-size: 20px;
+        color: white;
+      }
+    }
+  }
+
+  ion-chip {
+    align-self: flex-start;
+
+    ion-icon {
+      font-size: 16px;
+    }
+    span {
+      font-size: 14px;
+    }
+    }
+}
+// ========================================
+// SUBMIT BUTTON    
+// ========================================
+.submit-button {
+  margin-top: 20px;
+  border-radius: 16px;
+  animation: fadeInUp 0.4s ease-out;
+
+  ion-button {
+    width: 100%;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 16px;
+  }
+}
+// ========================================
+// ANIMATIONS       
+// ========================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

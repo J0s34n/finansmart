@@ -1,0 +1,207 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Dashboard</ion-title>
+    <ion-button slot="end" fill="clear" (click)="goToSettings()">
+      <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($any($event))">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="dashboard-container">
+
+    <!-- Header con Saludo -->
+    <div class="greeting-section">
+      <div class="greeting-content">
+        <div class="avatar-container" (click)="goToProfile()">
+          <ion-avatar>
+            <ion-icon name="person-circle-outline" *ngIf="!currentUser?.photoURL"></ion-icon>
+            <img [src]="currentUser?.photoURL" *ngIf="currentUser?.photoURL" alt="Avatar">
+          </ion-avatar>
+        </div>
+        <div class="greeting-text">
+          <h2>{{ getGreeting() }}</h2>
+          <p>{{ getUserDisplayName() }}</p>
+        </div>
+      </div>
+      <div class="month-indicator">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ currentMonth }}</span>
+      </div>
+    </div>
+
+    <!-- Balance Card -->
+    <ion-card class="balance-card">
+      <ion-card-content>
+        <div class="balance-header">
+          <span class="balance-label">Balance Actual</span>
+        </div>
+        <div class="balance-amount" [attr.data-color]="getBalanceColor()">
+          <h1>{{ formatAmount(stats?.balance || 0) }}</h1>
+        </div>
+        <ion-grid class="balance-details">
+          <ion-row>
+            <ion-col size="6">
+              <div class="balance-item income">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+                <div class="item-content">
+                  <span class="item-label">Ingresos</span>
+                  <span class="item-amount">{{ formatAmount(stats?.totalIncome || 0) }}</span>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="balance-item expense">
+                <ion-icon name="arrow-down-outline"></ion-icon>
+                <div class="item-content">
+                  <span class="item-label">Gastos</span>
+                  <span class="item-amount">{{ formatAmount(stats?.totalExpense || 0) }}</span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="3">
+            <div class="action-button" (click)="goToTransactions()">
+              <ion-icon name="wallet-outline"></ion-icon>
+              <span>Transacciones</span>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="action-button" (click)="goToBudgets()">
+              <ion-icon name="pie-chart-outline"></ion-icon>
+              <span>Presupuestos</span>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="action-button" (click)="goToReports()">
+              <ion-icon name="trending-up-outline"></ion-icon>
+              <span>Reportes</span>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="action-button" (click)="goToProfile()">
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <span>Perfil</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Budget Summary Card (si hay presupuestos) -->
+    <ion-card class="budget-card" *ngIf="hasBudgets()">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="pie-chart-outline"></ion-icon>
+          Presupuestos del Mes
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="budget-overview">
+          <div class="budget-percentage">
+            <span class="percentage-value" [style.color]="'var(--ion-color-' + getBudgetStatusColor() + ')'">
+              {{ getBudgetUsagePercentage() }}%
+            </span>
+            <span class="percentage-label">Uso promedio</span>
+          </div>
+          <div class="budget-stats">
+            <div class="stat-item">
+              <span class="stat-label">Presupuesto Total</span>
+              <span class="stat-value">{{ formatAmount(budgetSummary?.totalBudget || 0) }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Disponible</span>
+              <span class="stat-value">{{ formatAmount(budgetSummary?.totalRemaining || 0) }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="budget-alerts" *ngIf="budgetSummary && budgetSummary.categoriesOverBudget > 0">
+          <ion-chip color="danger">
+            <ion-label>{{ budgetSummary.categoriesOverBudget }} categorías excedidas</ion-label>
+          </ion-chip>
+        </div>
+        <ion-button expand="block" fill="outline" (click)="goToBudgets()">
+          Ver Detalles
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Recent Transactions -->
+    <ion-card class="transactions-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="time-outline"></ion-icon>
+          Transacciones Recientes
+        </ion-card-title>
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          (click)="goToTransactions()"
+          *ngIf="hasTransactions()">
+          Ver todas
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        
+        <!-- Lista de transacciones -->
+        <ion-list *ngIf="hasTransactions()" lines="none">
+          <ion-item 
+            *ngFor="let transaction of recentTransactions"
+            (click)="goToTransactionDetail(transaction)"
+            button
+            detail="false">
+            <div class="transaction-icon" slot="start" [style.background-color]="transaction.categoryColor">
+              <ion-icon [name]="transaction.categoryIcon || 'pricetag-outline'"></ion-icon>
+            </div>
+            <ion-label>
+              <h3>{{ transaction.description }}</h3>
+              <p>{{ transaction.categoryName }} • {{ getRelativeTime(transaction.date) }}</p>
+            </ion-label>
+            <div class="transaction-amount" slot="end">
+              <span 
+                [class.income]="transaction.type === 'income'"
+                [class.expense]="transaction.type === 'expense'">
+                {{ transaction.type === 'income' ? '+' : '-' }}{{ formatAmount(transaction.amount) }}
+              </span>
+            </div>
+          </ion-item>
+        </ion-list>
+
+        <!-- Estado vacío -->
+        <div class="empty-state" *ngIf="!hasTransactions()">
+          <ion-icon name="wallet-outline"></ion-icon>
+          <h3>No hay transacciones</h3>
+          <p>Comienza agregando tu primera transacción</p>
+          <ion-button (click)="goToAddTransaction()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Agregar Transacción
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- FAB Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToAddTransaction()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

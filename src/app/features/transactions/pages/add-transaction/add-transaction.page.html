@@ -1,0 +1,254 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Agregar Transacción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="add-transaction-container">
+
+    <!-- Tipo de Transacción (Ingreso/Gasto) -->
+    <ion-card class="type-card">
+      <ion-segment [value]="transactionType" (ionChange)="onTransactionTypeChange($event)">
+        <ion-segment-button [value]="'expense'" [disabled]="isLoading">
+          <ion-icon name="arrow-down-outline"></ion-icon>
+          <span>Gasto</span>
+        </ion-segment-button>
+        <ion-segment-button [value]="'income'" [disabled]="isLoading">
+          <ion-icon name="arrow-up-outline"></ion-icon>
+          <span>Ingreso</span>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-card>
+
+    <!-- Formulario -->
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+
+      <!-- Monto -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Monto</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('amount')"
+            [class.ion-valid]="transactionForm.get('amount')?.valid && transactionForm.get('amount')?.touched">
+            <ion-input
+              formControlName="amount"
+              type="number"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="0.00"
+              label="Cantidad"
+              labelPlacement="floating"
+              min="0">
+            </ion-input>
+            <ion-text slot="end" class="currency-label">MXN</ion-text>
+          </ion-item>
+
+          <!-- Error Monto -->
+          <div class="error-message" *ngIf="isFieldInvalid('amount')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('amount') }}</small>
+            </ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Categoría -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Categoría</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-select 
+              formControlName="category"
+              (ionChange)="onCategoryChange($event)"
+              [compareWith]="(a: any, b: any) => a.id === b.id"
+              [disabled]="isLoading">
+              <ion-select-option 
+                *ngFor="let category of categories"
+                [value]="category.id"
+                [selected]="selectedCategory?.id === category.id">
+                <div class="category-option">
+                  <ion-icon [name]="category.icon"></ion-icon>
+                  {{ category.name }}
+                </div>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Vista previa de categoría seleccionada -->
+          <div class="category-preview" *ngIf="selectedCategory">
+            <div 
+              class="category-badge"
+              [style.background-color]="selectedCategory.color">
+              <ion-icon [name]="selectedCategory.icon"></ion-icon>
+            </div>
+            <div class="category-details">
+              <span class="category-name">{{ selectedCategory.name }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Descripción -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Descripción</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('description')"
+            [class.ion-valid]="transactionForm.get('description')?.valid && transactionForm.get('description')?.touched">
+            <ion-input
+              formControlName="description"
+              type="text"
+              placeholder="Ej: Supermercado, Salario, etc."
+              label="Qué compraste o recibiste"
+              labelPlacement="floating"
+              [disabled]="isLoading">
+            </ion-input>
+          </ion-item>
+
+          <!-- Error Descripción -->
+          <div class="error-message" *ngIf="isFieldInvalid('description')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('description') }}</small>
+            </ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Notas (Opcional) -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Notas (Opcional)</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-textarea
+              formControlName="notes"
+              placeholder="Agrega detalles adicionales..."
+              label="Notas"
+              labelPlacement="floating"
+              [disabled]="isLoading"
+              rows="3">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Fecha -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Fecha</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('date')"
+            [class.ion-valid]="transactionForm.get('date')?.valid && transactionForm.get('date')?.touched">
+            <ion-input
+              formControlName="date"
+              type="date"
+              label="Fecha de la transacción"
+              labelPlacement="floating"
+              [disabled]="isLoading">
+            </ion-input>
+          </ion-item>
+
+          <!-- Error Fecha -->
+          <div class="error-message" *ngIf="isFieldInvalid('date')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('date') }}</small>
+            </ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Recibo -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Recibo (Opcional)</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          
+          <!-- Si no hay recibo, mostrar opciones -->
+          <div *ngIf="!receiptUrl" class="receipt-options">
+            <ion-button 
+              expand="block" 
+              color="primary"
+              fill="outline"
+              (click)="takePhoto()"
+              [disabled]="isLoading || isUploading">
+              <ion-icon name="camera-outline" slot="start"></ion-icon>
+              Tomar Foto
+            </ion-button>
+            <ion-button 
+              expand="block" 
+              color="primary"
+              fill="outline"
+              (click)="selectPhotoFromGallery()"
+              [disabled]="isLoading || isUploading">
+              <ion-icon name="image-outline" slot="start"></ion-icon>
+              Seleccionar de Galería
+            </ion-button>
+          </div>
+
+          <!-- Si hay recibo, mostrar preview -->
+          <div *ngIf="receiptUrl" class="receipt-preview">
+            <div class="receipt-image-container">
+              <img [src]="receiptUrl" alt="Recibo" class="receipt-image">
+              <ion-button 
+                fill="clear" 
+                color="danger"
+                (click)="removeReceipt()"
+                [disabled]="isLoading">
+                <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+            <ion-chip color="success">
+              <ion-icon name="checkmark-outline"></ion-icon>
+              <ion-label>Recibo adjuntado</ion-label>
+            </ion-chip>
+          </div>
+
+          <!-- Loading upload -->
+          <div *ngIf="isUploading" class="upload-loading">
+            <ion-spinner name="crescent"></ion-spinner>
+            <p>Subiendo recibo...</p>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones de Acción -->
+      <div class="action-buttons">
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="goBack()"
+          [disabled]="isLoading">
+          Cancelar
+        </ion-button>
+        <ion-button 
+          expand="block" 
+          type="submit"
+          [disabled]="isLoading">
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          <span *ngIf="!isLoading">Guardar Transacción</span>
+          <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        </ion-button>
+      </div>
+
+    </form>
+
+  </div>
+</ion-content>

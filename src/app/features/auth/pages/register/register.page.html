@@ -1,0 +1,201 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="register-container">
+    
+    <!-- Logo -->
+    <div class="header-section">
+      <div class="logo-container">
+        <ion-icon name="wallet" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">FinanSmart</h1>
+      <p class="app-subtitle">Comienza a gestionar tus finanzas hoy</p>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <ion-card class="register-card">
+      <ion-card-header>
+        <ion-card-title>Registro</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Campo Nombre -->
+          <ion-item 
+            lines="full" 
+            [class.ion-invalid]="isFieldInvalid('displayName')"
+            [class.ion-valid]="registerForm.get('displayName')?.valid && registerForm.get('displayName')?.touched">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="displayName"
+              type="text"
+              placeholder="Juan Pérez"
+              label="Nombre completo"
+              labelPlacement="floating"
+              autocomplete="name">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Error Nombre -->
+          <div class="error-message" *ngIf="isFieldInvalid('displayName')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('displayName') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Campo Email -->
+          <ion-item 
+            lines="full" 
+            [class.ion-invalid]="isFieldInvalid('email')"
+            [class.ion-valid]="registerForm.get('email')?.valid && registerForm.get('email')?.touched">
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="correo@ejemplo.com"
+              label="Email"
+              labelPlacement="floating"
+              autocomplete="email"
+              inputmode="email">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Error Email -->
+          <div class="error-message" *ngIf="isFieldInvalid('email')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('email') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Campo Password -->
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('password')"
+            [class.ion-valid]="registerForm.get('password')?.valid && registerForm.get('password')?.touched">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Contraseña"
+              label="Contraseña"
+              labelPlacement="floating"
+              autocomplete="new-password">
+            </ion-input>
+            <ion-button 
+              slot="end" 
+              fill="clear" 
+              (click)="togglePasswordVisibility()"
+              type="button">
+              <ion-icon 
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                slot="icon-only">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <!-- Error Password -->
+          <div class="error-message" *ngIf="isFieldInvalid('password')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('password') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Password Strength Indicator -->
+          <div class="password-strength" *ngIf="registerForm.get('password')?.value">
+            <div class="strength-label">
+              <small>Fortaleza de contraseña:</small>
+              <small [style.color]="'var(--ion-color-' + getPasswordStrength().color + ')'">
+                {{ getPasswordStrength().strength }}
+              </small>
+            </div>
+            <div class="strength-bar">
+              <div 
+                class="strength-fill" 
+                [style.width.%]="getPasswordStrength().percentage"
+                [style.background-color]="'var(--ion-color-' + getPasswordStrength().color + ')'">
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Confirm Password -->
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('confirmPassword')"
+            [class.ion-valid]="registerForm.get('confirmPassword')?.valid && registerForm.get('confirmPassword')?.touched">
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Confirmar contraseña"
+              label="Confirmar contraseña"
+              labelPlacement="floating"
+              autocomplete="new-password">
+            </ion-input>
+            <ion-button 
+              slot="end" 
+              fill="clear" 
+              (click)="toggleConfirmPasswordVisibility()"
+              type="button">
+              <ion-icon 
+                [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+                slot="icon-only">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <!-- Error Confirm Password -->
+          <div class="error-message" *ngIf="isFieldInvalid('confirmPassword')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('confirmPassword') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Términos y Condiciones -->
+          <div class="terms-section">
+            <ion-text color="medium">
+              <p class="terms-text">
+                Al crear una cuenta, aceptas nuestros 
+                <a href="#" class="link">Términos y Condiciones</a> y 
+                <a href="#" class="link">Política de Privacidad</a>
+              </p>
+            </ion-text>
+          </div>
+
+          <!-- Botón Register -->
+          <ion-button 
+            expand="block" 
+            type="submit"
+            [disabled]="isLoading"
+            class="register-button">
+            <span *ngIf="!isLoading">Crear Cuenta</span>
+            <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+          </ion-button>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Login Link -->
+    <div class="login-section">
+      <ion-text color="medium">
+        <p>¿Ya tienes cuenta?</p>
+      </ion-text>
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="goToLogin()"
+        [disabled]="isLoading">
+        Iniciar Sesión
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

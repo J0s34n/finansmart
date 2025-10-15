@@ -1,0 +1,120 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="login-container">
+    
+    <!-- Logo y Título -->
+    <div class="header-section">
+      <div class="logo-container">
+        <ion-icon name="wallet" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">FinanSmart</h1>
+      <p class="app-subtitle">Gestión inteligente de tus finanzas</p>
+    </div>
+
+    <!-- Formulario de Login -->
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title>Iniciar Sesión</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Campo Email -->
+          <ion-item 
+            lines="full" 
+            [class.ion-invalid]="isFieldInvalid('email')"
+            [class.ion-valid]="loginForm.get('email')?.valid && loginForm.get('email')?.touched">
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="correo@ejemplo.com"
+              label="Email"
+              labelPlacement="floating"
+              autocomplete="email"
+              inputmode="email">
+            </ion-input>
+          </ion-item>
+          
+          <!-- Error Email -->
+          <div class="error-message" *ngIf="isFieldInvalid('email')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('email') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Campo Password -->
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('password')"
+            [class.ion-valid]="loginForm.get('password')?.valid && loginForm.get('password')?.touched">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Contraseña"
+              label="Contraseña"
+              labelPlacement="floating"
+              autocomplete="current-password">
+            </ion-input>
+            <ion-button 
+              slot="end" 
+              fill="clear" 
+              (click)="togglePasswordVisibility()"
+              type="button">
+              <ion-icon 
+                [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+                slot="icon-only">
+              </ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <!-- Error Password -->
+          <div class="error-message" *ngIf="isFieldInvalid('password')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('password') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Forgot Password Link -->
+          <div class="forgot-password-container">
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              (click)="goToForgotPassword()"
+              type="button">
+              ¿Olvidaste tu contraseña?
+            </ion-button>
+          </div>
+
+          <!-- Botón Login -->
+          <ion-button 
+            expand="block" 
+            type="submit"
+            [disabled]="isLoading"
+            class="login-button">
+            <ion-icon name="log-in-outline" slot="start"></ion-icon>
+            <span *ngIf="!isLoading">Iniciar Sesión</span>
+            <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+          </ion-button>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Registro -->
+    <div class="register-section">
+      <ion-text color="medium">
+        <p>¿No tienes cuenta?</p>
+      </ion-text>
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="goToRegister()"
+        [disabled]="isLoading">
+        Crear Cuenta
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>
