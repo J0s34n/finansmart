@@ -1,0 +1,264 @@
+.add-budget-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+// ========================================
+// FORM CARDS
+// ========================================
+.form-card {
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.4s ease-out;
+
+  ion-card-header {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    ion-card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .suggested-amount {
+      font-size: 12px;
+      color: var(--ion-color-warning);
+      font-weight: 500;
+    }
+  }
+
+  ion-card-content {
+    padding: 16px;
+  }
+
+  ion-item {
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+    }
+
+    ion-input,
+    ion-select {
+      --padding-start: 0;
+    }
+  }
+}
+
+// ========================================
+// ERROR MESSAGES
+// ========================================
+.error-message {
+  padding: 4px 12px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  animation: fadeIn 0.3s ease-out;
+
+  small {
+    display: block;
+  }
+}
+
+// ========================================
+// INFO BOXES
+// ========================================
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ion-color-primary);
+
+  ion-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  span {
+    line-height: 1.4;
+  }
+}
+
+// ========================================
+// CATEGORÍA PREVIEW
+// ========================================
+.category-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--ion-color-light);
+
+  .category-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    ion-icon {
+      font-size: 24px;
+    }
+  }
+
+  .category-details {
+    flex: 1;
+
+    .category-name {
+      font-size: 16px;
+      font-weight: 600;
+      display: block;
+    }
+  }
+}
+
+// ========================================
+// THRESHOLD SECTION
+// ========================================
+.threshold-section {
+  margin-bottom: 16px;
+
+  .threshold-label {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 12px;
+
+    strong {
+      color: var(--ion-color-primary);
+      font-weight: 600;
+    }
+  }
+
+  ion-range {
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+// ========================================
+// CURRENCY LABEL
+// ========================================
+.currency-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+  padding-right: 12px;
+}
+
+// ========================================
+// SUMMARY CARD
+// ========================================
+.summary-card {
+  background: linear-gradient(135deg, rgba(var(--ion-color-primary-rgb), 0.05), rgba(var(--ion-color-success-rgb), 0.05));
+  border: 1px solid var(--ion-color-light);
+  border-radius: 16px;
+  margin-bottom: 20px;
+
+  ion-card-header {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ion-color-light);
+  }
+
+  ion-card-content {
+    padding: 16px;
+  }
+
+  ion-grid {
+    padding: 0;
+
+    ion-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(var(--ion-color-primary-rgb), 0.1);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      ion-col {
+        padding: 0 8px;
+
+        &:first-child {
+          flex: 0 0 auto;
+          width: 40%;
+        }
+      }
+    }
+  }
+
+  .summary-label {
+    font-size: 13px;
+    color: var(--ion-color-medium);
+    font-weight: 500;
+  }
+
+  .summary-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  ion-badge {
+    font-size: 12px;
+  }
+}
+
+// ========================================
+// BOTONES DE ACCIÓN
+// ========================================
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.5s ease-out;
+
+  ion-button {
+    height: 50px;
+    font-weight: 600;
+    font-size: 16px;
+    --border-radius: 10px;
+
+    ion-spinner {
+      margin: 0 8px;
+    }
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

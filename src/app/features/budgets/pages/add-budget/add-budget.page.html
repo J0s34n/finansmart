@@ -1,0 +1,256 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="/budgets"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Presupuesto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="add-budget-container">
+
+    <!-- Formulario -->
+    <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
+
+      <!-- Categoría -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Selecciona una Categoría</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full">
+            <ion-select 
+              formControlName="category"
+              (ionChange)="onCategoryChange($event)"
+              [compareWith]="(a: any, b: any) => a?.id === b?.id"
+              [disabled]="isLoading">
+              <ion-select-option 
+                *ngFor="let category of expenseCategories"
+                [value]="category.id">
+                <div class="category-option">
+                  <ion-icon [name]="category.icon"></ion-icon>
+                  {{ category.name }}
+                </div>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Vista previa de categoría -->
+          <div class="category-preview" *ngIf="selectedCategory">
+            <div 
+              class="category-badge"
+              [style.background-color]="selectedCategory.color">
+              <ion-icon [name]="selectedCategory.icon"></ion-icon>
+            </div>
+            <div class="category-details">
+              <span class="category-name">{{ selectedCategory.name }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Monto -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Monto del Presupuesto</ion-card-title>
+          <span class="suggested-amount" *ngIf="suggestedAmount > 0">
+            Sugerido: {{ formatAmount(suggestedAmount) }}
+          </span>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item 
+            lines="full"
+            [class.ion-invalid]="isFieldInvalid('amount')"
+            [class.ion-valid]="budgetForm.get('amount')?.valid && budgetForm.get('amount')?.touched">
+            <ion-input
+              formControlName="amount"
+              type="number"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="0.00"
+              label="Cantidad"
+              labelPlacement="floating"
+              min="0"
+              [disabled]="isLoading">
+            </ion-input>
+            <ion-text slot="end" class="currency-label">MXN</ion-text>
+          </ion-item>
+
+          <!-- Error -->
+          <div class="error-message" *ngIf="isFieldInvalid('amount')">
+            <ion-text color="danger">
+              <small>{{ getErrorMessage('amount') }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Info -->
+          <div class="info-box">
+            <ion-icon name="info-outline"></ion-icon>
+            <span>Este es el límite máximo que deseas gastar en esta categoría</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Período y Fecha -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Período</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Tipo de Período -->
+          <ion-item lines="full">
+            <ion-select 
+              formControlName="period"
+              [disabled]="isLoading">
+              <ion-select-option value="monthly">Mensual</ion-select-option>
+              <ion-select-option value="weekly">Semanal</ion-select-option>
+              <ion-select-option value="yearly">Anual</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Mes -->
+          <ion-item lines="full">
+            <ion-select 
+              formControlName="month"
+              [disabled]="isLoading">
+              <ion-select-option 
+                *ngFor="let month of getMonths()"
+                [value]="month.value">
+                {{ month.label }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Año -->
+          <ion-item lines="full">
+            <ion-select 
+              formControlName="year"
+              [disabled]="isLoading">
+              <ion-select-option 
+                *ngFor="let year of getYears()"
+                [value]="year">
+                {{ year }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Configuración de Alertas -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Configuración de Alertas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Threshold -->
+          <div class="threshold-section">
+            <ion-label class="threshold-label">
+              Alerta cuando llegue a <strong>{{ alertThreshold }}%</strong> del presupuesto
+            </ion-label>
+            <ion-range
+              formControlName="alertThreshold"
+              min="1"
+              max="100"
+              step="5"
+              (ionChange)="onThresholdChange($event)"
+              [disabled]="isLoading">
+              <ion-label slot="start">1%</ion-label>
+              <ion-label slot="end">100%</ion-label>
+            </ion-range>
+          </div>
+
+          <!-- Estado Activo -->
+          <ion-item lines="full">
+            <ion-label>Presupuesto Activo</ion-label>
+            <ion-toggle 
+              formControlName="isActive"
+              [disabled]="isLoading"
+              slot="end">
+            </ion-toggle>
+          </ion-item>
+
+          <!-- Info -->
+          <div class="info-box">
+            <ion-icon name="info-outline"></ion-icon>
+            <span>Recibirás notificaciones cuando alcances el porcentaje definido</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Resumen -->
+      <ion-card class="summary-card">
+        <ion-card-header>
+          <ion-card-title>Resumen</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <span class="summary-label">Categoría:</span>
+              </ion-col>
+              <ion-col>
+                <span class="summary-value">{{ selectedCategory?.name || 'No seleccionada' }}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="summary-label">Monto:</span>
+              </ion-col>
+              <ion-col>
+                <span class="summary-value">{{ formatAmount(budgetForm.get('amount')?.value || 0) }}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="summary-label">Período:</span>
+              </ion-col>
+              <ion-col>
+                <span class="summary-value">{{ getMonthName(budgetForm.get('month')?.value) }} {{ budgetForm.get('year')?.value }}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="summary-label">Alerta:</span>
+              </ion-col>
+              <ion-col>
+                <span class="summary-value">{{ alertThreshold }}%</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="summary-label">Estado:</span>
+              </ion-col>
+              <ion-col>
+                <ion-badge [color]="budgetForm.get('isActive')?.value ? 'success' : 'medium'">
+                  {{ budgetForm.get('isActive')?.value ? 'Activo' : 'Inactivo' }}
+                </ion-badge>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones de Acción -->
+      <div class="action-buttons">
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="goBack()"
+          [disabled]="isLoading">
+          Cancelar
+        </ion-button>
+        <ion-button 
+          expand="block" 
+          type="submit"
+          [disabled]="isLoading">
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          <span *ngIf="!isLoading">Crear Presupuesto</span>
+          <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        </ion-button>
+      </div>
+
+    </form>
+
+  </div>
+</ion-content>

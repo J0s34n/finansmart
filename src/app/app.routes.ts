@@ -127,5 +127,13 @@ export const routes: Routes = [
   {
     path: 'transactions',
     loadComponent: () => import('./features/transactions/pages/transactions/transactions.page').then( m => m.TransactionsPage)
+  },
+  {
+    path: 'budgets',
+    loadComponent: () => import('./features/budgets/pages/budgets/budgets.page').then( m => m.BudgetsPage)
+  },
+  {
+    path: 'add-budget',
+    loadComponent: () => import('./features/budgets/pages/add-budget/add-budget.page').then( m => m.AddBudgetPage)
   }
 ];

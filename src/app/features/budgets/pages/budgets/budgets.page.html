@@ -1,0 +1,202 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Presupuestos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($any($event))">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="budgets-container">
+
+    <!-- Mes Actual -->
+    <div class="month-header">
+      <h2>{{ currentMonth | titlecase }} {{ currentYear }}</h2>
+      <span class="subtitle">Presupuestos del mes</span>
+    </div>
+
+    <!-- Resumen General -->
+    <ion-card class="summary-card" *ngIf="budgetSummary">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="summary-item">
+                <span class="label">Presupuesto Total</span>
+                <span class="value">{{ formatAmount(budgetSummary.totalBudget) }}</span>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="summary-item">
+                <span class="label">Disponible</span>
+                <span class="value success">{{ formatAmount(budgetSummary.totalRemaining) }}</span>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <div class="summary-item">
+                <span class="label">Gastado</span>
+                <span class="value danger">{{ formatAmount(budgetSummary.totalSpent) }}</span>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="summary-item">
+                <span class="label">Uso Promedio</span>
+                <span class="value" [ngClass]="budgetSummary.averageUsage > 90 ? 'danger' : budgetSummary.averageUsage > 70 ? 'warning' : 'success'">
+                  {{ budgetSummary.averageUsage.toFixed(0) }}%
+                </span>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Alertas de Presupuestos -->
+        <div class="alerts-section" *ngIf="budgetSummary.categoriesOverBudget > 0 || budgetSummary.categoriesAtRisk > 0">
+          <ion-chip *ngIf="budgetSummary.categoriesOverBudget > 0" color="danger">
+            <ion-icon name="warning-outline"></ion-icon>
+            <ion-label>{{ budgetSummary.categoriesOverBudget }} excedidas</ion-label>
+          </ion-chip>
+          <ion-chip *ngIf="budgetSummary.categoriesAtRisk > 0" color="warning">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <ion-label>{{ budgetSummary.categoriesAtRisk }} en riesgo</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Filtros -->
+    <ion-segment [value]="selectedFilter" (ionChange)="onFilterChange($event)" class="filters-segment">
+      <ion-segment-button value="all">
+        <span>Todos</span>
+      </ion-segment-button>
+      <ion-segment-button value="active">
+        <span>Activos</span>
+      </ion-segment-button>
+      <ion-segment-button value="danger">
+        <span>Alertas</span>
+      </ion-segment-button>
+      <ion-segment-button value="exceeded">
+        <span>Excedidos</span>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Lista de Presupuestos -->
+    <div class="budgets-list" *ngIf="hasBudgets()">
+      <div class="budgets-header">
+        <span class="count">{{ getBudgetCount() }}</span>
+      </div>
+
+      <ion-list lines="none">
+        <ion-item-sliding 
+          *ngFor="let budget of filteredBudgets"
+          class="budget-item">
+          
+          <!-- Budget Card -->
+          <ion-item button>
+            <div class="budget-content">
+              <!-- Icono de Categoría -->
+              <div class="category-icon" [style.background-color]="budget.categoryColor">
+                <ion-icon [name]="budget.categoryIcon"></ion-icon>
+              </div>
+
+              <!-- Información -->
+              <div class="budget-info">
+                <div class="budget-header-row">
+                  <h3>{{ budget.categoryName }}</h3>
+                  <ion-badge [color]="getStatusColor(budget.status)">
+                    <ion-icon [name]="getStatusIcon(budget.status)"></ion-icon>
+                    {{ getStatusLabel(budget.status) }}
+                  </ion-badge>
+                </div>
+
+                <!-- Progreso -->
+                <div class="progress-section">
+                  <ion-progress-bar 
+                    [value]="budget.percentage / 100"
+                    [color]="getProgressColor(budget.percentage)">
+                  </ion-progress-bar>
+                  <span class="percentage">{{ getPercentageText(budget) }}</span>
+                </div>
+
+                <!-- Montos -->
+                <div class="amounts-row">
+                  <span class="amount">
+                    <small>Gastado:</small>
+                    <strong>{{ formatAmount(budget.spent) }}</strong>
+                  </span>
+                  <span class="amount">
+                    <small>Límite:</small>
+                    <strong>{{ formatAmount(budget.amount) }}</strong>
+                  </span>
+                  <span class="amount" [class.positive]="budget.remaining >= 0" [class.negative]="budget.remaining < 0">
+                    <small>Disponible:</small>
+                    <strong>{{ formatAmount(budget.remaining) }}</strong>
+                  </span>
+                </div>
+
+                <!-- Alerta si está excedido o en peligro -->
+                <ion-chip 
+                  *ngIf="shouldShowAlert(budget)"
+                  [color]="budget.status === 'exceeded' ? 'danger' : 'warning'"
+                  class="alert-chip">
+                  <ion-icon [name]="budget.status === 'exceeded' ? 'warning-outline' : 'alert-circle-outline'"></ion-icon>
+                  <ion-label>{{ budget.getAlertMessage() }}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+          </ion-item>
+
+          <!-- Opciones de Deslizar -->
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="goToEditBudget(budget, $event)">
+              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteBudget(budget, $event)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+
+        </ion-item-sliding>
+      </ion-list>
+    </div>
+
+    <!-- Estado Vacío -->
+    <div class="empty-state" *ngIf="!loading && !hasBudgets()">
+      <ion-icon name="stats-chart-outline"></ion-icon>
+      <h3>No hay presupuestos</h3>
+      <p *ngIf="selectedFilter === 'all'">
+        Comienza creando tu primer presupuesto
+      </p>
+      <p *ngIf="selectedFilter !== 'all'">
+        No hay presupuestos que coincidan con este filtro
+      </p>
+      <ion-button (click)="goToAddBudget()" *ngIf="selectedFilter === 'all'">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Crear Presupuesto
+      </ion-button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando presupuestos...</p>
+    </div>
+
+  </div>
+
+  <!-- FAB Button -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="goToAddBudget()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
