@@ -236,18 +236,198 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    padding: 16px;
+    padding: 20px 16px;
     border-top: 1px solid var(--ion-color-light);
-    background-color: var(--ion-color-light);
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-    animation: slideUp 0.3s ease-out;
-    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
-    }
+
     ion-button {
+      height: 48px;
+      font-weight: 600;
       --border-radius: 8px;
-      font-size: 14px;
-      height: 40px;
     }
+  }
+}
+
+// ========================================
+// FAB BUTTON
+// ========================================
+ion-fab {
+  ion-fab-button {
+    --box-shadow: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+@media (max-width: 576px) {
+  .active-filters {
+    padding: 10px 12px;
+    gap: 6px;
+
+    ion-chip {
+      font-size: 11px;
+    }
+  }
+
+  .transactions-list {
+    .transactions-header {
+      padding: 10px 12px;
+      font-size: 11px;
+    }
+
+    ion-list ion-item-sliding {
+      margin-bottom: 6px;
+
+      ion-item {
+        --padding-start: 8px;
+        --inner-padding-end: 8px;
+        margin: 0 8px;
+
+        .transaction-icon {
+          width: 40px;
+          height: 40px;
+
+          ion-icon {
+            font-size: 20px;
+          }
+        }
+
+        ion-label {
+          h3 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
+
+        .transaction-amount {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .filters-modal .filter-actions {
+    grid-template-columns: 1fr;
+    padding: 16px 12px;
+
+    ion-button {
+      height: 44px;
+    }
+  }
+}
+
+// ========================================
+// DARK MODE
+// ========================================
+@media (prefers-color-scheme: dark) {
+  .active-filters {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .transactions-list {
+    .transactions-header {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    ion-list ion-item-sliding ion-item {
+      background-color: rgba(255, 255, 255, 0.05);
+
+      &:active {
+        background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+      }
+    }
+  }
+
+  .filters-modal {
+    ion-list {
+      ion-list-header {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+
+      ion-item {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    .filter-actions {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+// ========================================
+// TRANSITIONS
+// ========================================
+ion-item-sliding ion-item {
+  transition: background-color 0.15s ease;
+}
+
+ion-button {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+// ========================================
+// SEARCH BAR STYLING
+// ========================================
+ion-searchbar {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+// ========================================
+// LIST STYLING
+// ========================================
+ion-list {
+  &::part(native) {
+    padding: 0;
+  }
+}
+
+// ========================================
+// INFINITE SCROLL (para futura implementación)
+// ========================================
+ion-infinite-scroll {
+  ion-infinite-scroll-content {
+    padding: 20px;
+
+    ion-spinner {
+      --color: var(--ion-color-primary);
+    }
+  }
 }
