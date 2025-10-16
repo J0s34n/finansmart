@@ -108,32 +108,4 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-  {
-    path: 'login',
-    loadComponent: () => import('./features/auth/pages/login/login.page').then( m => m.LoginPage)
-  },
-  {
-    path: 'register',
-    loadComponent: () => import('./features/auth/pages/register/register.page').then( m => m.RegisterPage)
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard.page').then( m => m.DashboardPage)
-  },
-  {
-    path: 'add-transaction',
-    loadComponent: () => import('./features/transactions/pages/add-transaction/add-transaction.page').then( m => m.AddTransactionPage)
-  },
-  {
-    path: 'transactions',
-    loadComponent: () => import('./features/transactions/pages/transactions/transactions.page').then( m => m.TransactionsPage)
-  },
-  {
-    path: 'budgets',
-    loadComponent: () => import('./features/budgets/pages/budgets/budgets.page').then( m => m.BudgetsPage)
-  },
-  {
-    path: 'add-budget',
-    loadComponent: () => import('./features/budgets/pages/add-budget/add-budget.page').then( m => m.AddBudgetPage)
-  }
 ];
