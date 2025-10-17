@@ -200,26 +200,34 @@ export class AuthService {
       const userId = this.currentFirebaseUser.uid;
       const userRef = doc(this.firestore, 'users', userId);
 
-      // Actualizar en Firestore
-      await updateDoc(userRef, {
-        ...data,
-        updatedAt: new Date().toISOString()
-      });
-
-      // Actualizar displayName en Firebase Auth si cambió
-      if (data.displayName && data.displayName !== this.currentFirebaseUser.displayName) {
-        await updateProfile(this.currentFirebaseUser, {
-          displayName: data.displayName
-        });
+// ✅ Filtrar undefined
+    const updateData: any = { ...data };
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] === undefined) {
+        delete updateData[key];
       }
+    });
 
-      // Recargar datos
-      await this.loadUserData(userId);
-    } catch (error) {
-      console.error('Error al actualizar perfil:', error);
-      throw error;
+    // Actualizar en Firestore
+    await updateDoc(userRef, {
+      ...updateData,
+      updatedAt: new Date().toISOString()
+    });
+
+    // Actualizar displayName en Firebase Auth si cambió
+    if (data.displayName && data.displayName !== this.currentFirebaseUser.displayName) {
+      await updateProfile(this.currentFirebaseUser, {
+        displayName: data.displayName
+      });
     }
+
+    // Recargar datos
+    await this.loadUserData(userId);
+  } catch (error) {
+    console.error('Error al actualizar perfil:', error);
+    throw error;
   }
+}
 
   /**
    * Actualiza las preferencias del usuario
@@ -345,15 +353,25 @@ export class AuthService {
       preferences: UserModel.getDefaultPreferences()
     });
 
-    try {
-      await setDoc(doc(this.firestore, 'users', user.uid), user.toJSON());
-      this.currentUserSubject.next(user);
-      return user;
-    } catch (error) {
-      console.error('Error al crear documento de usuario:', error);
-      throw error;
-    }
+      try {
+    // IMPORTANTE: Filtrar undefined antes de guardar
+    const userData = user.toJSON();
+    
+    // Remover propiedades undefined
+    Object.keys(userData).forEach(key => {
+      if (userData[key] === undefined) {
+        delete userData[key];
+      }
+    });
+
+    await setDoc(doc(this.firestore, 'users', user.uid), userData);
+    this.currentUserSubject.next(user);
+    return user;
+  } catch (error) {
+    console.error('Error al crear documento de usuario:', error);
+    throw error;
   }
+}
 
   /**
    * Maneja errores de Firebase Auth y los convierte a mensajes legibles
