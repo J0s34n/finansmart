@@ -164,7 +164,6 @@ export class DownloadManagerService {
         base64Data = await this.blobToBase64(blob);
       }
 
-      // Determinar directorio según el tipo de archivo
       // Usar Directory.Documents por compatibilidad (Directory.Downloads no existe en algunas versiones)
       const directory = Directory.Documents;
 
