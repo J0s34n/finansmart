@@ -1,6 +1,6 @@
 ﻿export const environment = {
   production: false,
-  firebase: {
+  firebaseConfig: {
     apiKey: "AIzaSyAexmuC4uCsavx1JtUaZYt9v7v-EVDu2r0",
     authDomain: "finansmart-93ea9.firebaseapp.com",
     projectId: "finansmart-93ea9",

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -54,14 +54,17 @@ import { BudgetService } from '@app/core/services/budget.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { BudgetModel, BudgetStatus, BudgetSummary } from '@app/models';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-budgets',
   templateUrl: './budgets.page.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrls: ['./budgets.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
+    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,

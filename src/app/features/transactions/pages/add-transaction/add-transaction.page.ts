@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -48,21 +48,24 @@ import {
   trashOutline
 } from 'ionicons/icons';
 import { Subject, takeUntil } from 'rxjs';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AuthService } from '@app/core/services/auth.service';
 import { TransactionService } from '@app/core/services/transaction.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { ImageUploadService } from '@app/core/services/image-upload.service';
 import { TransactionModel, CategoryModel, CategoryType } from '@app/models';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-transaction',
   templateUrl: './add-transaction.page.html',
   styleUrls: ['./add-transaction.page.scss'],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,
@@ -103,7 +106,10 @@ export class AddTransactionPage implements OnInit, OnDestroy {
   receiptDeleteUrl: string | null = null;
   isLoading = false;
   isUploading = false;
-  showAlert = false;
+
+  compareCategories(a: any, b: any): boolean {
+  return a && b ? a.id === b.id : a === b;
+}
 
   private destroy$ = new Subject<void>();
 
@@ -116,8 +122,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
     private router: Router,
     private loadingController: LoadingController,
     private toastController: ToastController,
-    private alertController: AlertController,
-    private camera: typeof Camera
+    private alertController: AlertController
   ) {
     // Registrar iconos
     addIcons({
@@ -203,7 +208,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
    */
   async takePhoto(): Promise<void> {
     try {
-      const image = await this.camera.getPhoto({
+      const image = await Camera.getPhoto({
         quality: 60,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera,
@@ -214,9 +219,12 @@ export class AddTransactionPage implements OnInit, OnDestroy {
       if (image.dataUrl) {
         await this.uploadReceipt(image.dataUrl);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al tomar foto:', error);
-      await this.showToast('Error al tomar foto', 'danger');
+      // No mostrar error si el usuario canceló
+      if (error.message !== 'User cancelled photos app') {
+        await this.showToast('Error al tomar foto', 'danger');
+      }
     }
   }
 
@@ -225,7 +233,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
    */
   async selectPhotoFromGallery(): Promise<void> {
     try {
-      const image = await this.camera.getPhoto({
+      const image = await Camera.getPhoto({
         quality: 60,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Photos,
@@ -236,9 +244,12 @@ export class AddTransactionPage implements OnInit, OnDestroy {
       if (image.dataUrl) {
         await this.uploadReceipt(image.dataUrl);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al seleccionar foto:', error);
-      await this.showToast('Error al seleccionar foto', 'danger');
+      // No mostrar error si el usuario canceló
+      if (error.message !== 'User cancelled photos app') {
+        await this.showToast('Error al seleccionar foto', 'danger');
+      }
     }
   }
 
@@ -275,7 +286,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
   async removeReceipt(): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Eliminar Recibo',
-      message: '¿Estás seguro de que deseas eliminar el recibo?',
+      message: 'Estás seguro de que deseas eliminar el recibo?',
       buttons: [
         {
           text: 'Cancelar',
@@ -348,7 +359,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
       await this.transactionService.addTransaction(transaction);
 
       await loading.dismiss();
-      await this.showToast('¡Transacción guardada correctamente!', 'success');
+      await this.showToast('Transacción guardada correctamente!', 'success');
 
       // Redirigir al dashboard
       this.router.navigate(['/dashboard']);
@@ -382,7 +393,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
   private async showCancelAlert(): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Descartar Cambios',
-      message: '¿Descartas los cambios realizados?',
+      message: 'Descartas los cambios realizados?',
       buttons: [
         {
           text: 'Cancelar',

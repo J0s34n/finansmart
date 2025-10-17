@@ -69,7 +69,7 @@
             <ion-select 
               formControlName="category"
               (ionChange)="onCategoryChange($event)"
-              [compareWith]="(a: any, b: any) => a.id === b.id"
+              [compareWith]="compareCategories"
               [disabled]="isLoading">
               <ion-select-option 
                 *ngFor="let category of categories"

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -55,14 +55,17 @@ import { TransactionService } from '@app/core/services/transaction.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { TransactionModel, CategoryModel, CategoryType, TransactionFilters } from '@app/models';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.scss'],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
+    IonicModule,
     FormsModule,
     IonContent,
     IonHeader,
@@ -100,6 +103,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
   allTransactions: TransactionModel[] = [];
   filteredTransactions: TransactionModel[] = [];
   categories: CategoryModel[] = [];
+  CategoryType = CategoryType;
   
   // Filtros
   searchText = '';
@@ -179,7 +183,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
   /**
    * Aplica todos los filtros
    */
-  private applyFilters(): void {
+  public applyFilters(): void {
     let filtered = this.allTransactions;
 
     // Filtrar por búsqueda

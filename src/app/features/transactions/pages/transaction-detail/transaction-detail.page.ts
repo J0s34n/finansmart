@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -45,14 +45,17 @@ import { Subject, takeUntil } from 'rxjs';
 import { TransactionService } from '@app/core/services/transaction.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { TransactionModel, CategoryType } from '@app/models';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-transaction-detail',
   templateUrl: './transaction-detail.page.html',
   styleUrls: ['./transaction-detail.page.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   standalone: true,
   imports: [
     CommonModule,
+    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,

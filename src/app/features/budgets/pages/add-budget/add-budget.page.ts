@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -48,14 +48,17 @@ import { BudgetService } from '@app/core/services/budget.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { TransactionService } from '@app/core/services/transaction.service';
 import { BudgetModel, BudgetPeriod, CategoryType, CategoryModel } from '@app/models';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-budget',
   templateUrl: './add-budget.page.html',
   styleUrls: ['./add-budget.page.scss'],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
+    IonicModule,
     ReactiveFormsModule,
     IonContent,
     IonHeader,
@@ -425,5 +428,9 @@ export class AddBudgetPage implements OnInit, OnDestroy {
       style: 'currency',
       currency
     }).format(amount);
+  }
+
+  compareById(item1: any, item2: any): boolean {
+    return item1 && item2 && item1.id === item2.id;
   }
 }

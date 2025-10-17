@@ -75,9 +75,9 @@ export class BudgetModel implements Budget {
   month: number;
   year: number;
   spent: number;
-  remaining: number;
-  percentage: number;
-  status: BudgetStatus;
+  remaining!: number;
+  percentage!: number;
+  status: BudgetStatus = BudgetStatus.SAFE;
   alertThreshold: number;
   isActive: boolean;
   createdAt: Date;

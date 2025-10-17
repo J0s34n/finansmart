@@ -168,7 +168,7 @@
             slot="start"
             value="expense"
             [checked]="selectedType === 'expense'"
-            (ionChange)="selectedType = 'expense'; applyFilters()">
+            (ionChange)="selectedType = CategoryType.EXPENSE; applyFilters()">
           </ion-radio>
         </ion-item>
         <ion-item>
@@ -177,7 +177,7 @@
             slot="start"
             value="income"
             [checked]="selectedType === 'income'"
-            (ionChange)="selectedType = 'income'; applyFilters()">
+            (ionChange)="selectedType = CategoryType.INCOME; applyFilters()">
           </ion-radio>
         </ion-item>
       </ion-list>
