@@ -1,0 +1,501 @@
+// ==========================================
+// VARIABLES Y PALETA DE COLORES
+// ==========================================
+
+$primary-color: #2196F3;
+$danger-color: #F44336;
+
+$text-primary: #212121;
+$text-secondary: #757575;
+$text-hint: #BDBDBD;
+
+$bg-light: #FAFAFA;
+$bg-card: #FFFFFF;
+$bg-overlay: rgba(0, 0, 0, 0.04);
+
+$border-color: #E0E0E0;
+$shadow-elevation-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-elevation-2: 0 4px 8px rgba(0, 0, 0, 0.12);
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+
+$transition-duration: 300ms;
+$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+// ==========================================
+// GENERAL
+// ==========================================
+
+:host {
+  --ion-content-padding: 0;
+  --ion-padding: 0;
+}
+
+ion-content {
+  --padding-bottom: $spacing-lg;
+}
+
+// ==========================================
+// LOADING STATE
+// ==========================================
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: $spacing-lg;
+
+  ion-spinner {
+    --color: $primary-color;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+// ==========================================
+// SETTINGS CONTAINER
+// ==========================================
+
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  animation: fadeIn $transition-duration $transition-timing;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================
+// SETTINGS CARD
+// ==========================================
+
+.settings-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-1;
+  border: none;
+
+  ion-card-header {
+    padding: $spacing-md $spacing-lg;
+    background: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+    border-bottom: 1px solid $border-color;
+
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: $text-primary;
+
+      ion-icon {
+        width: 20px;
+        height: 20px;
+        color: $primary-color;
+      }
+    }
+  }
+
+  ion-card-content {
+    padding: $spacing-lg 0;
+  }
+}
+
+// ==========================================
+// SETTING ITEM
+// ==========================================
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid $border-color;
+  gap: $spacing-md;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .setting-label {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    flex: 1;
+
+    .label-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .label-description {
+      font-size: 12px;
+      color: $text-secondary;
+    }
+  }
+
+  .value {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-secondary;
+  }
+
+  ion-select,
+  .language-select,
+  .currency-select {
+    --padding-start: 0;
+    --padding-end: 0;
+    text-align: right;
+
+    &::part(label) {
+      color: $text-secondary;
+    }
+  }
+
+  ion-toggle {
+    --track-background-checked: $primary-color;
+    --track-background: $border-color;
+  }
+
+  ion-range {
+    --bar-background: $border-color;
+    --bar-background-active: $primary-color;
+    --knob-background: $primary-color;
+    --knob-size: 20px;
+  }
+}
+
+// ==========================================
+// TOGGLE ITEM
+// ==========================================
+
+.toggle-item {
+  justify-content: space-between;
+
+  ion-toggle {
+    margin: 0;
+  }
+}
+
+// ==========================================
+// ION SELECT OVERRIDE
+// ==========================================
+
+ion-select {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  &::part(icon) {
+    color: $text-secondary;
+  }
+}
+
+ion-select-option {
+  --color: $text-primary;
+  --background: $bg-card;
+}
+
+// ==========================================
+// ION SEGMENT
+// ==========================================
+
+ion-segment {
+  --background: $bg-overlay;
+  border-radius: $radius-md;
+  padding: $spacing-xs;
+
+  ion-segment-button {
+    --color: $text-secondary;
+    --color-checked: $primary-color;
+    --indicator-color: $primary-color;
+    --border-radius: $radius-md;
+    margin: 0;
+
+    ion-label {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    ion-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+  }
+}
+
+// ==========================================
+// ION RANGE
+// ==========================================
+
+ion-range {
+  padding: $spacing-md $spacing-lg;
+
+  ion-label {
+    font-size: 12px;
+    color: $text-secondary;
+  }
+}
+
+// ==========================================
+// LOGOUT SECTION
+// ==========================================
+
+.logout-section {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  ion-button {
+    height: 48px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: $radius-md;
+
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+}
+
+// ==========================================
+// IONIC OVERRIDES
+// ==========================================
+
+ion-header {
+  ion-toolbar {
+    --background: $bg-card;
+    --border-bottom: 1px solid $border-color;
+    box-shadow: $shadow-elevation-1;
+
+    ion-title {
+      font-weight: 600;
+      font-size: 18px;
+      color: $text-primary;
+    }
+
+    ion-button {
+      color: $primary-color;
+
+      &:disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+ion-card {
+  margin: 0;
+  background-color: $bg-card;
+
+  ion-card-content {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+
+  ion-card-header {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+}
+
+// ==========================================
+// DARK MODE
+// ==========================================
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --background: #121212;
+  }
+
+  .settings-container {
+    background-color: #121212;
+  }
+
+  .settings-card {
+    background-color: #1E1E1E;
+
+    ion-card-header {
+      background: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+      border-bottom-color: #333333;
+
+      ion-card-title {
+        color: #FFFFFF;
+      }
+    }
+
+    ion-card-content {
+      background-color: #1E1E1E;
+    }
+  }
+
+  .setting-item {
+    border-bottom-color: #333333;
+    background-color: rgba(255, 255, 255, 0.02);
+
+    .setting-label .label-text {
+      color: #FFFFFF;
+    }
+
+    .setting-label .label-description {
+      color: #B0B0B0;
+    }
+
+    .value {
+      color: #B0B0B0;
+    }
+
+    ion-select::part(label) {
+      color: #B0B0B0;
+    }
+
+    ion-select-option {
+      --color: #FFFFFF;
+      --background: #1E1E1E;
+    }
+  }
+
+  ion-segment {
+    --background: rgba(255, 255, 255, 0.1);
+
+    ion-segment-button {
+      --color: #B0B0B0;
+      --color-checked: #64B5F6;
+      --indicator-color: #2196F3;
+    }
+  }
+
+  ion-range {
+    --bar-background: #333333;
+    --bar-background-active: #2196F3;
+    --knob-background: #2196F3;
+  }
+
+  ion-toggle {
+    --track-background-checked: #2196F3;
+    --track-background: #333333;
+  }
+
+  .logout-section {
+    padding: $spacing-lg 0;
+  }
+
+  ion-header ion-toolbar {
+    --background: #1E1E1E;
+    --border-bottom: 1px solid #333333;
+
+    ion-title {
+      color: #FFFFFF;
+    }
+  }
+
+  ion-card {
+    background-color: #1E1E1E;
+  }
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+
+@media (max-width: 480px) {
+  .settings-container {
+    padding: $spacing-md;
+  }
+
+  .setting-item {
+    flex-wrap: wrap;
+
+    .setting-label {
+      width: 100%;
+      margin-bottom: $spacing-sm;
+    }
+
+    ion-select,
+    ion-toggle,
+    ion-range,
+    ion-segment,
+    .value {
+      width: 100%;
+    }
+  }
+
+  ion-segment {
+    ion-segment-button {
+      font-size: 11px;
+    }
+  }
+
+  ion-range {
+    width: 100%;
+  }
+
+  .logout-section {
+    padding: $spacing-md;
+  }
+}
+
+@media (min-width: 768px) {
+  .settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .setting-item {
+    padding: $spacing-lg;
+  }
+}
+
+// ==========================================
+// LANDSCAPE MODE
+// ==========================================
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .settings-container {
+    padding: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  .setting-item {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  ion-card-header {
+    padding-top: $spacing-sm !important;
+    padding-bottom: $spacing-sm !important;
+  }
+}

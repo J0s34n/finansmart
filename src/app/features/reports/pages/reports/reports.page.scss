@@ -1,0 +1,850 @@
+// ==========================================
+// VARIABLES Y PALETA DE COLORES
+// ==========================================
+
+$primary-color: #2196F3;
+$success-color: #4CAF50;
+$danger-color: #F44336;
+$warning-color: #FFC107;
+$info-color: #00BCD4;
+
+$text-primary: #212121;
+$text-secondary: #757575;
+$text-hint: #BDBDBD;
+
+$bg-light: #FAFAFA;
+$bg-card: #FFFFFF;
+$bg-overlay: rgba(0, 0, 0, 0.04);
+
+$border-color: #E0E0E0;
+$shadow-elevation-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-elevation-2: 0 4px 8px rgba(0, 0, 0, 0.12);
+$shadow-elevation-3: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+
+$transition-duration: 300ms;
+$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+// ==========================================
+// GENERAL
+// ==========================================
+
+:host {
+  --ion-content-padding: 0;
+  --ion-padding: 0;
+}
+
+ion-content {
+  --padding-bottom: $spacing-lg;
+}
+
+// ==========================================
+// LOADING STATE
+// ==========================================
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: $spacing-lg;
+
+  ion-spinner {
+    --color: $primary-color;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+// ==========================================
+// MAIN CONTAINER
+// ==========================================
+
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  animation: fadeIn $transition-duration $transition-timing;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================
+// MONTH SELECTOR
+// ==========================================
+
+.month-selector-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-2;
+  border: none;
+  overflow: hidden;
+
+  ion-card-content {
+    padding: $spacing-lg;
+  }
+}
+
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+
+  .nav-button {
+    --padding-start: $spacing-sm;
+    --padding-end: $spacing-sm;
+    margin: 0;
+    color: $primary-color;
+
+    &:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    ion-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .month-display {
+    flex: 1;
+    text-align: center;
+
+    h3 {
+      margin: 0 0 $spacing-xs 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+      text-transform: capitalize;
+    }
+
+    .month-subtitle {
+      margin: 0;
+      font-size: 12px;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Segment
+ion-segment {
+  --background: $bg-overlay;
+  border-radius: $radius-md;
+  padding: $spacing-xs;
+
+  ion-segment-button {
+    --color: $text-secondary;
+    --color-checked: $primary-color;
+    --indicator-color: $primary-color;
+    --border-radius: $radius-md;
+    margin: 0;
+
+    ion-label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+  }
+}
+
+// ==========================================
+// KPI GRID
+// ==========================================
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-1;
+  border: none;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  transition: all $transition-duration $transition-timing;
+
+  &:hover {
+    box-shadow: $shadow-elevation-3;
+    transform: translateY(-4px);
+  }
+
+  ion-card-content {
+    padding: $spacing-lg;
+  }
+
+  .kpi-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin: 0 0 $spacing-md 0;
+    font-size: 12px;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+
+    ion-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .kpi-value {
+    margin: 0 0 $spacing-xs 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .kpi-transactions {
+    margin: 0;
+    font-size: 12px;
+    color: $text-hint;
+  }
+
+  &.income {
+    border-left: 4px solid $success-color;
+
+    .kpi-value {
+      color: $success-color;
+    }
+  }
+
+  &.expense {
+    border-left: 4px solid $danger-color;
+
+    .kpi-value {
+      color: $danger-color;
+    }
+  }
+
+  &.balance {
+    border-left: 4px solid $primary-color;
+
+    &.positive .kpi-value {
+      color: $success-color;
+    }
+
+    &.negative .kpi-value {
+      color: $danger-color;
+    }
+  }
+}
+
+// ==========================================
+// CHARTS GRID
+// ==========================================
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-1;
+  border: none;
+  overflow: hidden;
+
+  ion-card-header {
+    padding: $spacing-md $spacing-lg;
+    background: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+    border-bottom: 1px solid $border-color;
+
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: $text-primary;
+
+      ion-icon {
+        width: 20px;
+        height: 20px;
+        color: $primary-color;
+      }
+    }
+  }
+
+  ion-card-content {
+    padding: $spacing-lg;
+  }
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+
+  canvas {
+    max-height: 300px;
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: $spacing-lg;
+  color: $text-secondary;
+  font-size: 14px;
+  margin: 0;
+}
+
+// ==========================================
+// DETAIL CARDS
+// ==========================================
+
+.detail-card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-1;
+  border: none;
+  overflow: hidden;
+  animation: slideUp $transition-duration $transition-timing;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  ion-card-header {
+    padding: $spacing-md $spacing-lg;
+    background: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+    border-bottom: 1px solid $border-color;
+
+    ion-card-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: $text-primary;
+
+      ion-icon {
+        width: 20px;
+        height: 20px;
+        color: $primary-color;
+      }
+    }
+  }
+
+  ion-card-content {
+    padding: $spacing-lg;
+  }
+}
+
+// ==========================================
+// EXPENSE LIST
+// ==========================================
+
+.expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background-color: $bg-overlay;
+  border-radius: $radius-md;
+  transition: all $transition-duration $transition-timing;
+
+  &:hover {
+    background-color: rgba(33, 150, 243, 0.08);
+  }
+
+  .expense-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex: 1;
+
+    .category-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: $shadow-elevation-1;
+
+      ion-icon {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    .category-details {
+      flex: 1;
+      min-width: 0;
+
+      h4 {
+        margin: 0 0 2px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      p {
+        margin: 0;
+        font-size: 12px;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .expense-amount {
+    .amount {
+      font-size: 16px;
+      font-weight: 700;
+      color: $danger-color;
+    }
+  }
+}
+
+// ==========================================
+// BUDGET LIST
+// ==========================================
+
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.budget-item {
+  padding: $spacing-md;
+  background-color: $bg-overlay;
+  border-radius: $radius-md;
+  border: 1px solid $border-color;
+  transition: all $transition-duration $transition-timing;
+
+  &:hover {
+    border-color: $primary-color;
+    background-color: rgba(33, 150, 243, 0.05);
+  }
+
+  .budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-md;
+    gap: $spacing-md;
+
+    .category-info {
+      display: flex;
+      align-items: flex-start;
+      gap: $spacing-md;
+      flex: 1;
+
+      .category-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: $shadow-elevation-1;
+
+        ion-icon {
+          width: 22px;
+          height: 22px;
+        }
+      }
+
+      h4 {
+        margin: 0 0 $spacing-xs 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: $text-primary;
+      }
+
+      p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+
+        &.status-safe {
+          color: $success-color;
+        }
+
+        &.status-warning {
+          color: $warning-color;
+        }
+
+        &.status-danger {
+          color: #F97316;
+        }
+
+        &.status-exceeded {
+          color: $danger-color;
+        }
+      }
+    }
+
+    .amount-right {
+      .percentage {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .progress-container {
+    margin-bottom: $spacing-md;
+
+    ion-progress-bar {
+      height: 8px;
+      border-radius: $radius-sm;
+    }
+  }
+
+  .budget-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      padding: $spacing-md;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: $radius-sm;
+
+      small {
+        font-size: 11px;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      strong {
+        font-size: 15px;
+        color: $text-primary;
+      }
+
+      &.remaining-negative strong {
+        color: $danger-color;
+      }
+    }
+  }
+}
+
+// ==========================================
+// STATISTICS GRID
+// ==========================================
+
+ion-grid {
+  padding: 0;
+
+  ion-row {
+    margin-bottom: $spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    ion-col {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      padding: $spacing-md;
+      background-color: $bg-overlay;
+      border-radius: $radius-md;
+      transition: all $transition-duration $transition-timing;
+
+      &:hover {
+        background-color: rgba(33, 150, 243, 0.08);
+      }
+
+      .stat-label {
+        display: block;
+        font-size: 11px;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        font-weight: 600;
+      }
+
+      .stat-value {
+        display: block;
+        font-size: 18px;
+        color: $text-primary;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// ==========================================
+// IONIC OVERRIDES
+// ==========================================
+
+// Header
+ion-header {
+  ion-toolbar {
+    --background: $bg-card;
+    --border-bottom: 1px solid $border-color;
+    box-shadow: $shadow-elevation-1;
+
+    ion-title {
+      font-weight: 600;
+      font-size: 18px;
+      color: $text-primary;
+    }
+
+    ion-button {
+      color: $primary-color;
+
+      &:disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+// Cards generales
+ion-card {
+  margin: 0;
+  background-color: $bg-card;
+
+  ion-card-content {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+
+  ion-card-header {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+}
+
+// Progress bars
+ion-progress-bar {
+  --background: #E0E0E0;
+
+  &[color="success"] {
+    --background: $success-color;
+  }
+
+  &[color="warning"] {
+    --background: $warning-color;
+  }
+
+  &[color="danger"] {
+    --background: $danger-color;
+  }
+}
+
+// ==========================================
+// DARK MODE
+// ==========================================
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --background: #121212;
+  }
+
+  .reports-container {
+    background-color: #121212;
+  }
+
+  .month-selector-card,
+  .chart-card,
+  .detail-card {
+    ion-card-header {
+      background: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+      border-bottom-color: #333333;
+
+      ion-card-title {
+        color: #FFFFFF;
+      }
+    }
+
+    ion-card-content {
+      background-color: #1E1E1E;
+    }
+  }
+
+  .month-selector {
+    border-bottom-color: #333333;
+
+    .month-display {
+      h3 {
+        color: #FFFFFF;
+      }
+
+      .month-subtitle {
+        color: #B0B0B0;
+      }
+    }
+  }
+
+  .kpi-card {
+    background: linear-gradient(135deg, #1E1E1E 0%, #262626 100%);
+
+    .kpi-label {
+      color: #B0B0B0;
+    }
+
+    .kpi-value {
+      color: #FFFFFF;
+    }
+
+    .kpi-transactions {
+      color: #757575;
+    }
+  }
+
+  .expense-item,
+  .budget-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #333333;
+
+    &:hover {
+      background-color: rgba(33, 150, 243, 0.15);
+    }
+
+    .category-details {
+      h4 {
+        color: #FFFFFF;
+      }
+
+      p {
+        color: #B0B0B0;
+      }
+    }
+
+    .budget-details .detail-item {
+      background-color: rgba(255, 255, 255, 0.1);
+
+      small {
+        color: #B0B0B0;
+      }
+
+      strong {
+        color: #FFFFFF;
+      }
+    }
+  }
+
+  ion-grid ion-col {
+    background-color: rgba(255, 255, 255, 0.05);
+
+    &:hover {
+      background-color: rgba(33, 150, 243, 0.15);
+    }
+
+    .stat-label {
+      color: #B0B0B0;
+    }
+
+    .stat-value {
+      color: #FFFFFF;
+    }
+  }
+
+  ion-header ion-toolbar {
+    --background: #1E1E1E;
+    --border-bottom: 1px solid #333333;
+
+    ion-title {
+      color: #FFFFFF;
+    }
+  }
+
+  ion-card {
+    background-color: #1E1E1E;
+  }
+
+  ion-segment {
+    --background: rgba(255, 255, 255, 0.1);
+  }
+
+  .no-data {
+    color: #B0B0B0;
+  }
+}
+
+// ==========================================
+// TABLET / RESPONSIVE REFINEMENTS
+// ==========================================
+
+@media (min-width: 768px) {
+  .reports-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .chart-container {
+    height: 350px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

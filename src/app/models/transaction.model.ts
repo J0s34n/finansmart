@@ -59,6 +59,9 @@ export interface TransactionStats {
  * Clase Transaction con métodos útiles
  */
 export class TransactionModel implements Transaction {
+  getRelativeTime(date: Date): string {
+    throw new Error('Method not implemented.');
+  }
   id: string;
   userId: string;
   type: CategoryType;

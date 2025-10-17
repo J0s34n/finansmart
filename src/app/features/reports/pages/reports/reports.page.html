@@ -1,0 +1,318 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Reportes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportToPDF()" [disabled]="loading">
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando reportes...</p>
+  </div>
+
+  <!-- Content -->
+  <div class="reports-container" *ngIf="!loading">
+
+    <!-- Month Selector -->
+    <ion-card class="month-selector-card">
+      <ion-card-content>
+        <div class="month-selector">
+          <ion-button fill="clear" (click)="previousMonth()" class="nav-button">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          
+          <div class="month-display">
+            <h3>{{ selectedMonth | date: 'MMMM yyyy' }}</h3>
+            <p class="month-subtitle">{{ getMonthDescription() }}</p>
+          </div>
+
+          <ion-button fill="clear" (click)="nextMonth()" 
+            [disabled]="isNextMonthDisabled()" class="nav-button">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </div>
+
+        <ion-segment [value]="reportType" (ionChange)="onReportTypeChange($event)">
+          <ion-segment-button value="monthly">
+            <ion-label>Mensual</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="budget">
+            <ion-label>Presupuesto</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Monthly Report -->
+    <div *ngIf="reportType === 'monthly'">
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <ion-card class="kpi-card income">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="arrow-up-outline"></ion-icon>
+              Ingresos
+            </p>
+            <h3 class="kpi-value">{{ monthlyStats.totalIncome | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ getIncomeCount() }} transacciones</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card expense">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="arrow-down-outline"></ion-icon>
+              Gastos
+            </p>
+            <h3 class="kpi-value">{{ monthlyStats.totalExpense | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ getExpenseCount() }} transacciones</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card balance" 
+          [class.positive]="monthlyStats.balance >= 0"
+          [class.negative]="monthlyStats.balance < 0">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="wallet-outline"></ion-icon>
+              Balance
+            </p>
+            <h3 class="kpi-value">{{ monthlyStats.balance | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ monthlyStats.balance >= 0 ? 'Positivo' : 'Negativo' }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-grid">
+        <!-- Pie Chart - Expenses by Category -->
+        <ion-card class="chart-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="pie-chart-outline"></ion-icon>
+              Gastos por Categoría
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container" *ngIf="categoryChartData">
+              <canvas #categoryChart></canvas>
+            </div>
+            <p class="no-data" *ngIf="!categoryChartData">
+              No hay datos disponibles
+            </p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Trend Chart - Last 6 Months -->
+        <ion-card class="chart-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="trending-up-outline"></ion-icon>
+              Tendencia (Últimos 6 Meses)
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container" *ngIf="trendChartData">
+              <canvas #trendChart></canvas>
+            </div>
+            <p class="no-data" *ngIf="!trendChartData">
+              No hay datos disponibles
+            </p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Top Expenses -->
+      <ion-card class="detail-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="list-outline"></ion-icon>
+            Top 5 Categorías
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="expense-list">
+            <div class="expense-item" *ngFor="let item of topExpenses">
+              <div class="expense-info">
+                <div class="category-badge" [style.background-color]="item.color">
+                  <ion-icon [name]="item.icon"></ion-icon>
+                </div>
+                <div class="category-details">
+                  <h4>{{ item.name }}</h4>
+                  <p>{{ item.percentage.toFixed(1) }}% del total</p>
+                </div>
+              </div>
+              <div class="expense-amount">
+                <span class="amount">{{ item.amount | currency: 'MXN' }}</span>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Summary Stats -->
+      <ion-card class="detail-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Estadísticas
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <span class="stat-label">Promedio de Gasto</span>
+                <span class="stat-value">{{ monthlyStats.averageExpense | currency: 'MXN' }}</span>
+              </ion-col>
+              <ion-col>
+                <span class="stat-label">Gasto Más Grande</span>
+                <span class="stat-value">{{ monthlyStats.largestExpense | currency: 'MXN' }}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <span class="stat-label">Total de Transacciones</span>
+                <span class="stat-value">{{ monthlyStats.transactionCount }}</span>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <!-- Budget Report -->
+    <div *ngIf="reportType === 'budget'">
+
+      <!-- Budget Summary -->
+      <div class="kpi-grid">
+        <ion-card class="kpi-card">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="wallet-outline"></ion-icon>
+              Presupuesto Total
+            </p>
+            <h3 class="kpi-value">{{ budgetSummary.totalBudget | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ budgetSummary.categoriesAtRisk }} en riesgo</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="flame-outline"></ion-icon>
+              Total Gastado
+            </p>
+            <h3 class="kpi-value">{{ budgetSummary.totalSpent | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ budgetSummary.averageUsage.toFixed(1) }}% promedio</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="kpi-card">
+          <ion-card-content>
+            <p class="kpi-label">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              Sobrante
+            </p>
+            <h3 class="kpi-value">{{ budgetSummary.totalRemaining | currency: 'MXN' }}</h3>
+            <p class="kpi-transactions">{{ budgetSummary.categoriesOverBudget }} excedidas</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Budget Progress Chart -->
+      <ion-card class="chart-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="bar-chart-outline"></ion-icon>
+            Presupuesto vs Gasto por Categoría
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-container" *ngIf="budgetChartData">
+            <canvas #budgetChart></canvas>
+          </div>
+          <p class="no-data" *ngIf="!budgetChartData">
+            No hay presupuestos configurados para este mes
+          </p>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Budget Details -->
+      <ion-card class="detail-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="list-outline"></ion-icon>
+            Detalles por Categoría
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="budget-list">
+            <div class="budget-item" *ngFor="let budget of monthBudgets">
+              <div class="budget-header">
+                <div class="category-info">
+                  <div class="category-badge" [style.background-color]="budget.categoryColor">
+                    <ion-icon [name]="budget.categoryIcon"></ion-icon>
+                  </div>
+                  <div>
+                    <h4>{{ budget.categoryName }}</h4>
+                    <p [ngClass]="'status-' + budget.status">
+                      {{ budget.getStatusLabel() }}
+                    </p>
+                  </div>
+                </div>
+                <div class="amount-right">
+                  <span class="percentage" [style.color]="budget.getStatusColor()">
+                    {{ budget.percentage.toFixed(0) }}%
+                  </span>
+                </div>
+              </div>
+
+              <div class="progress-container">
+                <ion-progress-bar 
+                  [value]="budget.percentage / 100" 
+                  [color]="getBudgetProgressColor(budget)">
+                </ion-progress-bar>
+              </div>
+
+              <div class="budget-details">
+                <span class="detail-item">
+                  <small>Gastado:</small>
+                  <strong>{{ budget.spent | currency: 'MXN' }}</strong>
+                </span>
+                <span class="detail-item">
+                  <small>Límite:</small>
+                  <strong>{{ budget.amount | currency: 'MXN' }}</strong>
+                </span>
+                <span class="detail-item" 
+                  [class.remaining-negative]="budget.remaining < 0">
+                  <small>Restante:</small>
+                  <strong>{{ budget.remaining | currency: 'MXN' }}</strong>
+                </span>
+              </div>
+            </div>
+
+            <p class="no-data" *ngIf="monthBudgets.length === 0">
+              No hay presupuestos configurados para este mes
+            </p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,190 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalles de Transacción</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="shareTransaction()" [disabled]="!transaction">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando detalles...</p>
+  </div>
+
+  <!-- Contenido -->
+  <div class="transaction-detail-container" *ngIf="!loading && transaction">
+
+    <!-- Card Principal -->
+    <ion-card class="main-card">
+      <ion-card-content>
+        <!-- Header con Tipo y Categoría -->
+        <div class="transaction-header">
+          <div class="type-badge" [style.background-color]="transaction.categoryColor">
+            <ion-icon [name]="transaction.categoryIcon"></ion-icon>
+          </div>
+          <div class="header-info">
+            <h2>{{ transaction.description }}</h2>
+            <p class="category-name">{{ transaction.categoryName }}</p>
+            <span class="age-badge">{{ getTransactionAge() }}</span>
+          </div>
+          <ion-badge [color]="getTypeColor(transaction.type)">
+            <ion-icon [name]="getTypeIcon(transaction.type)"></ion-icon>
+            {{ getTypeLabel(transaction.type) }}
+          </ion-badge>
+        </div>
+
+        <!-- Monto Principal -->
+        <div class="amount-section">
+          <span class="amount-label">Monto</span>
+          <div 
+            class="amount-display"
+            [class.income]="transaction.type === 'income'"
+            [class.expense]="transaction.type === 'expense'"
+            (click)="copyAmount()">
+            <span class="amount-text">{{ formatAmount(transaction.amount, transaction.type) }}</span>
+            <small class="copy-hint">Toca para copiar</small>
+          </div>
+        </div>
+
+        <!-- Información de Fecha -->
+        <div class="info-row">
+          <div class="info-item">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <div class="info-content">
+              <span class="label">Fecha</span>
+              <span class="value">{{ transaction.getFormattedDate() }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <ion-icon name="time-outline"></ion-icon>
+            <div class="info-content">
+              <span class="label">Registrado</span>
+              <span class="value">{{ transaction.createdAt | date: 'short' }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notas -->
+    <ion-card class="detail-card" *ngIf="hasNotes()">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="document-outline"></ion-icon>
+          Notas
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="notes-text">{{ transaction.notes }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Recibo -->
+    <ion-card class="detail-card" *ngIf="hasReceipt()">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="image-outline"></ion-icon>
+          Recibo
+        </ion-card-title>
+        <ion-button fill="clear" size="small" (click)="openReceiptFullscreen()">
+          Pantalla Completa
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="receipt-container">
+          <img [src]="transaction.receiptUrl" alt="Recibo" class="receipt-image">
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tags -->
+    <ion-card class="detail-card" *ngIf="hasTags()">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="pricetag-outline"></ion-icon>
+          Etiquetas
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="tags-container">
+          <ion-chip *ngFor="let tag of transaction.tags" outline>
+            <ion-label>{{ tag }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Información Adicional -->
+    <ion-card class="detail-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          Información Adicional
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <span class="info-label">ID de Transacción</span>
+              <span class="info-value" (click)="copyDescription()">{{ transaction.id }}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <span class="info-label">Moneda</span>
+              <span class="info-value">{{ transaction.currency }}</span>
+            </ion-col>
+            <ion-col>
+              <span class="info-label">Tipo</span>
+              <span class="info-value">{{ getTypeLabel(transaction.type) }}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <span class="info-label">Categoría ID</span>
+              <span class="info-value">{{ transaction.categoryId }}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <span class="info-label">Última Actualización</span>
+              <span class="info-value">{{ transaction.updatedAt | date: 'medium' }}</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de Acción -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block" 
+        color="primary"
+        (click)="editTransaction()"
+        [disabled]="loading">
+        <ion-icon name="pencil-outline" slot="start"></ion-icon>
+        Editar
+      </ion-button>
+      <ion-button 
+        expand="block" 
+        color="danger"
+        (click)="deleteTransaction()"
+        [disabled]="loading">
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
+        Eliminar
+      </ion-button>
+    </div>
+
+  </div>
+
+</ion-content>

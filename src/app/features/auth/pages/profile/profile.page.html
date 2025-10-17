@@ -1,0 +1,202 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleEditMode()" [disabled]="loading">
+        <ion-icon [name]="isEditMode ? 'close-outline' : 'pencil-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="profile-container" *ngIf="!loading && user">
+
+    <!-- Profile Header -->
+    <ion-card class="profile-header">
+      <ion-card-content>
+        <div class="profile-avatar">
+          <div class="avatar-circle" [style.background-color]="getAvatarColor()">
+            {{ user.getInitials() }}
+          </div>
+          <button class="edit-avatar-btn" *ngIf="isEditMode">
+            <ion-icon name="camera-outline"></ion-icon>
+          </button>
+        </div>
+
+        <h1 class="profile-name">{{ user.displayName || 'Sin nombre' }}</h1>
+        <p class="profile-email">{{ user.email }}</p>
+
+        <div class="profile-badges">
+          <ion-badge 
+            *ngIf="isEmailVerified()" 
+            color="success"
+            class="verification-badge">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            Email Verificado
+          </ion-badge>
+          <ion-badge 
+            *ngIf="!isEmailVerified()" 
+            color="warning"
+            class="verification-badge">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            Email No Verificado
+          </ion-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- View Mode -->
+    <div *ngIf="!isEditMode" class="view-mode">
+
+      <!-- Profile Info -->
+      <ion-card class="info-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="person-outline"></ion-icon>
+            Información Personal
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="info-row">
+            <span class="info-label">Nombre</span>
+            <span class="info-value">{{ user.displayName || 'No especificado' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ user.email }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Fecha de Registro</span>
+            <span class="info-value">{{ user.createdAt | date: 'longDate' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Última Actualización</span>
+            <span class="info-value">{{ user.updatedAt | date: 'short' }}</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Settings Link -->
+      <ion-card class="action-card">
+        <ion-card-content>
+          <ion-button expand="block" (click)="goToSettings()">
+            <ion-icon name="settings-outline" slot="start"></ion-icon>
+            Configuración
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Danger Zone -->
+      <ion-card class="danger-card">
+        <ion-card-header>
+          <ion-card-title class="danger-title">
+            <ion-icon name="warning-outline"></ion-icon>
+            Zona de Peligro
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p class="danger-description">Acciones que no se pueden deshacer</p>
+          <ion-button 
+            expand="block" 
+            color="danger"
+            (click)="changePassword()"
+            class="danger-button">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            Cambiar Contraseña
+          </ion-button>
+          <ion-button 
+            expand="block" 
+            color="danger"
+            fill="outline"
+            (click)="deleteAccount()"
+            class="danger-button">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Eliminar Cuenta
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <!-- Edit Mode -->
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" *ngIf="isEditMode">
+
+      <!-- Edit Profile Info -->
+      <ion-card class="edit-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="create-outline"></ion-icon>
+            Editar Perfil
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <!-- Display Name -->
+          <ion-item class="input-item">
+            <ion-label position="floating">Nombre para Mostrar</ion-label>
+            <ion-input 
+              type="text"
+              formControlName="displayName"
+              placeholder="Tu nombre"
+              (blur)="markFieldAsTouched('displayName')"
+              [disabled]="loading">
+            </ion-input>
+          </ion-item>
+
+          <div class="error-message" *ngIf="hasError('displayName')">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>{{ getErrorMessage('displayName') }}</span>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Error Message -->
+      <ion-card class="error-card" *ngIf="errorMessage">
+        <ion-card-content>
+          <div class="error-content">
+            <ion-icon name="warning-outline"></ion-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Submit Buttons -->
+      <div class="action-buttons">
+        <ion-button 
+          expand="block"
+          type="submit"
+          color="primary"
+          [disabled]="loading || !profileForm.valid"
+          class="submit-button">
+          <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+          <span *ngIf="!loading">Guardar Cambios</span>
+          <span *ngIf="loading">Guardando...</span>
+        </ion-button>
+        <ion-button 
+          expand="block"
+          fill="outline"
+          type="button"
+          (click)="toggleEditMode()"
+          [disabled]="loading">
+          Cancelar
+        </ion-button>
+      </div>
+
+    </form>
+
+  </div>
+
+</ion-content>

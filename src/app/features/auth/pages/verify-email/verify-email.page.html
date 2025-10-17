@@ -1,0 +1,119 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Verificar Email</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Verified State -->
+  <div class="verified-state" *ngIf="isEmailVerified()">
+    <ion-card class="success-card">
+      <ion-card-content>
+        <div class="success-icon">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+        <h2>¡Email Verificado!</h2>
+        <p class="success-message">Tu email ha sido verificado correctamente.</p>
+        <p class="info-text">Ahora tienes acceso completo a todas las funciones de FinanSmart.</p>
+        
+        <ion-button expand="block" color="primary" (click)="goBack()">
+          Continuar
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Not Verified State -->
+  <div class="not-verified-state" *ngIf="!isEmailVerified()">
+    <ion-card class="header-card">
+      <ion-card-content>
+        <div class="header-icon">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+        <h1>Verifica tu Email</h1>
+        <p class="subtitle">Para acceder a todas las funciones, necesitamos verificar tu email</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Email Info -->
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title>Email a Verificar</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="email-display">{{ userEmail }}</p>
+        <p class="info-text">Hemos enviado un enlace de verificación a este email. Por favor revisa tu bandeja de entrada (incluyendo spam).</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Steps -->
+    <ion-card class="steps-card">
+      <ion-card-header>
+        <ion-card-title>Pasos a Seguir</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <p class="step-title">Revisa tu Email</p>
+            <p class="step-description">Busca un email de FinanSmart con el asunto "Verificar Email"</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <p class="step-title">Haz Clic en el Enlace</p>
+            <p class="step-description">Abre el email y haz clic en el botón "Verificar Email"</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <p class="step-title">Vuelve a la App</p>
+            <p class="step-description">Regresa y haz clic en "Recargar" para confirmar la verificación</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Error Message -->
+    <ion-card class="error-card" *ngIf="errorMessage">
+      <ion-card-content>
+        <div class="error-content">
+          <ion-icon name="warning-outline"></ion-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button 
+        expand="block"
+        color="primary"
+        (click)="checkVerificationStatus()"
+        [disabled]="loading">
+        <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+        <span *ngIf="!loading">Recargar Verificación</span>
+        <span *ngIf="loading">Verificando...</span>
+      </ion-button>
+
+      <ion-button 
+        expand="block"
+        fill="outline"
+        (click)="resendVerificationEmail()"
+        [disabled]="loading || resendCooldown > 0">
+        <span *ngIf="resendCooldown === 0">Reenviar Email</span>
+        <span *ngIf="resendCooldown > 0">Espera {{ resendCooldown }}s</span>
+      </ion-button>
+    </div>
+
+  </div>
+
+</ion-content>
