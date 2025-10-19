@@ -116,21 +116,18 @@ export class SettingsService {
   /**
    * Aplica el tema seleccionado al DOM
    */
-  public applyTheme(theme: 'light' | 'dark' | 'auto'): void {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = theme === 'dark' || 
-                   (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    const html = document.documentElement;
-    
-    if (isDark) {
-      html.classList.add('dark');
-      html.style.colorScheme = 'dark';
-    } else {
-      html.classList.remove('dark');
-      html.style.colorScheme = 'light';
-    }
+public applyTheme(theme: 'light' | 'dark' | 'auto'): void {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = theme === 'dark' || (theme === 'auto' && prefersDark);
+  const html = document.documentElement;
+  if (isDark) {
+    html.classList.add('dark');
+    html.style.colorScheme = 'dark';
+  } else {
+    html.classList.remove('dark');
+    html.style.colorScheme = 'light';
   }
+}
 
   /**
    * Observable que emite el símbolo de moneda

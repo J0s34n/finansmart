@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     // Suscribirse a los cambios de tema para aplicarlos globalmente
     this.settingsService.theme$.subscribe(theme => {
-      (this.settingsService as any).applyTheme(theme);
+      this.settingsService.applyTheme(theme);
     });
      // 🔹 Aplicar idioma global (si usas i18n)
     // this.settingsService.language$.subscribe(lang => {

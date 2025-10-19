@@ -31,35 +31,17 @@
  * For more info, please see:
  * https://ionicframework.com/docs/theming/dark-mode
  */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-
+/* ✅ Tema controlado manualmente */
 :root {
-  /** Light theme colors **/
-  --ion-color-primary: #3880ff;
-  --ion-color-secondary: #0cd1e8;
-  --ion-color-tertiary: #7044ff;
-  --ion-color-success: #10dc60;
-  --ion-color-warning: #ffce00;
-  --ion-color-danger: #f04141;
-  --ion-color-dark: #222428;
-  --ion-color-medium: #989aa2;
-  --ion-color-light: #f4f5f8;
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
 }
 
 .dark {
-  /** Dark theme overrides **/
-  --ion-color-primary: #4c8dff;
-  --ion-color-secondary: #50c8ff;
-  --ion-color-tertiary: #6a64ff;
-  --ion-color-success: #2fdf75;
-  --ion-color-warning: #ffd534;
-  --ion-color-danger: #ff4961;
-  --ion-color-dark: #f4f5f8;
-  --ion-color-medium: #989aa2;
-  --ion-color-light: #222428;
-  background-color: #121212;
-  color: #ffffff;
+  --ion-background-color: #121212;
+  --ion-text-color: #ffffff;
 }
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/*@import "@ionic/angular/css/palettes/dark.class.css"; 
+/*@import '@ionic/angular/css/palettes/dark.system.css'; */
+
