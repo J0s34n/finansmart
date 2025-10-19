@@ -54,7 +54,6 @@ import { BudgetService } from '@app/core/services/budget.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { BudgetModel, BudgetStatus, BudgetSummary } from '@app/models';
-import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-budgets',
@@ -64,7 +63,6 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,

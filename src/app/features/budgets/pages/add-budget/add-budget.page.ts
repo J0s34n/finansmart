@@ -48,7 +48,7 @@ import { BudgetService } from '@app/core/services/budget.service';
 import { CategoryService } from '@app/core/services/category.service';
 import { TransactionService } from '@app/core/services/transaction.service';
 import { BudgetModel, BudgetPeriod, CategoryType, CategoryModel } from '@app/models';
-import { IonicModule } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-add-budget',
@@ -58,7 +58,6 @@ import { IonicModule } from '@ionic/angular';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
-    IonicModule,
     ReactiveFormsModule,
     IonContent,
     IonHeader,
@@ -139,6 +138,7 @@ export class AddBudgetPage implements OnInit, OnDestroy {
     const year = now.getFullYear();
 
     this.budgetForm = this.formBuilder.group({
+      category: ['', [Validators.required]],
       amount: ['', [
         Validators.required,
         Validators.min(1),
