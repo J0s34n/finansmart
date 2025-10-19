@@ -1,89 +1,151 @@
 import { Injectable } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  QueryConstraint,
-  onSnapshot,
-  Unsubscribe,
+import { 
+  Firestore, 
+  doc, 
+  docData, 
+  collection, 
+  collectionData, 
+  query, 
+  where, 
+  QueryConstraint, 
+  DocumentData,
   writeBatch,
-  CollectionReference,
-  DocumentReference,
-  serverTimestamp
+  WriteBatch,
+  getDoc
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 
 /**
- * Servicio base para operaciones con Firestore
- * Proporciona métodos genéricos para CRUD
+ * Tipo para operaciones en batch
  */
-@Injectable({
-  providedIn: 'root'
-})
-export class FirestoreService {
+export interface BatchOperation {
+  type: 'set' | 'update' | 'delete';
+  collectionPath: string;
+  documentId: string;
+  data?: any;
+}
 
+/**
+ * Servicio centralizado para operaciones en Firestore.
+ * - Usa exclusivamente helpers re-exportados por `@angular/fire/firestore`.
+ * - Manejo consistente de errores y tipado.
+ */
+@Injectable({ providedIn: 'root' })
+export class FirestoreService {
   constructor(private firestore: Firestore) {}
 
-  // ========================================
-  // MÉTODOS DE ESCRITURA
-  // ========================================
+  /**
+   * Obtiene un documento por ID como promesa (devuelve null si no existe)
+   */
+  async getById<T = any>(collectionPath: string, documentId: string): Promise<T | null> {
+    try {
+      const ref = doc(this.firestore, `${collectionPath}/${documentId}`);
+      const data = await firstValueFrom(docData(ref, { idField: 'id' }));
+      return (data ?? null) as T | null;
+    } catch (error) {
+      console.error(`[FirestoreService] getById failed: ${collectionPath}/${documentId}`, error);
+      return null;
+    }
+  }
 
   /**
-   * Agrega un nuevo documento con ID autogenerado
+   * Obtiene todos los documentos de una colección (snapshot único como promesa)
    */
-  async add<T>(collectionPath: string, data: T): Promise<string> {
+  async getAll<T = any>(collectionPath: string): Promise<T[]> {
     try {
       const colRef = collection(this.firestore, collectionPath);
-      const docRef = await addDoc(colRef, {
-        ...data,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      });
+      const data = await firstValueFrom(collectionData(colRef, { idField: 'id' }));
+      return (data ?? []) as T[];
+    } catch (error) {
+      console.error(`[FirestoreService] getAll failed: ${collectionPath}`, error);
+      return [];
+    }
+  }
+
+  /**
+   * Obtiene documentos con filtros (QueryConstraints). Devuelve snapshot único.
+   */
+  async getWhere<T = any>(collectionPath: string, ...queryConstraints: QueryConstraint[]): Promise<T[]> {
+    try {
+      const colRef = collection(this.firestore, collectionPath);
+      const q = query(colRef, ...queryConstraints);
+      const data = await firstValueFrom(collectionData(q as any, { idField: 'id' }));
+      return (data ?? []) as T[];
+    } catch (error) {
+      console.error(`[FirestoreService] getWhere failed: ${collectionPath}`, error);
+      return [];
+    }
+  }
+
+  /**
+   * Escucha cambios en tiempo real de documentos con filtros (Observable)
+   * IMPORTANTE: Devuelve un Observable que continúa escuchando cambios
+   */
+  watchQuery<T extends { id?: string } = any>(collectionPath: string, ...queryConstraints: QueryConstraint[]): Observable<T[]> {
+    try {
+      const colRef = collection(this.firestore, collectionPath);
+      const q = query(colRef, ...queryConstraints);
+      return collectionData(q as any, { idField: 'id' }) as Observable<T[]>;
+    } catch (error) {
+      console.error(`[FirestoreService] watchQuery failed: ${collectionPath}`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Verifica si un documento existe
+   */
+  async exists(collectionPath: string, documentId: string): Promise<boolean> {
+    try {
+      const ref = doc(this.firestore, `${collectionPath}/${documentId}`);
+      const docSnapshot = await getDoc(ref as any);
+      return docSnapshot.exists();
+    } catch (error) {
+      console.error(`[FirestoreService] exists failed: ${collectionPath}/${documentId}`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Agrega un documento a la colección y devuelve el id generado.
+   * Si quieres usar un ID personalizado usa `setWithId`.
+   */
+  async add<T = any>(collectionPath: string, data: T): Promise<string> {
+    try {
+      const colRef = collection(this.firestore, collectionPath);
+      const { addDoc } = await import('@angular/fire/firestore');
+      const docRef = await addDoc(colRef as any, this._normalizeData(data));
       return docRef.id;
     } catch (error) {
-      console.error(`Error al agregar documento en ${collectionPath}:`, error);
+      console.error(`[FirestoreService] add failed: ${collectionPath}`, error);
       throw error;
     }
   }
 
   /**
-   * Crea o actualiza un documento con ID específico
+   * Crea/actualiza un documento con un ID específico (set)
    */
-  async set<T>(collectionPath: string, documentId: string, data: T): Promise<void> {
+  async setWithId<T = any>(collectionPath: string, documentId: string, data: T, merge = false): Promise<void> {
     try {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      await setDoc(docRef, {
-        ...data,
-        updatedAt: serverTimestamp()
-      });
+      const docRef = doc(this.firestore, `${collectionPath}/${documentId}`);
+      const { setDoc } = await import('@angular/fire/firestore');
+      await setDoc(docRef as any, this._normalizeData(data), { merge });
     } catch (error) {
-      console.error(`Error al crear documento ${documentId}:`, error);
+      console.error(`[FirestoreService] setWithId failed: ${collectionPath}/${documentId}`, error);
       throw error;
     }
   }
 
   /**
-   * Actualiza campos específicos de un documento
+   * Actualiza campos de un documento (merge)
    */
-  async update<T>(collectionPath: string, documentId: string, data: Partial<T>): Promise<void> {
+  async update<T = any>(collectionPath: string, documentId: string, partial: Partial<T>): Promise<void> {
     try {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      await updateDoc(docRef, {
-        ...data,
-        updatedAt: serverTimestamp()
-      });
+      const docRef = doc(this.firestore, `${collectionPath}/${documentId}`);
+      const { updateDoc } = await import('@angular/fire/firestore');
+      await updateDoc(docRef as any, this._normalizeData(partial));
     } catch (error) {
-      console.error(`Error al actualizar documento ${documentId}:`, error);
+      console.error(`[FirestoreService] update failed: ${collectionPath}/${documentId}`, error);
       throw error;
     }
   }
@@ -93,292 +155,65 @@ export class FirestoreService {
    */
   async delete(collectionPath: string, documentId: string): Promise<void> {
     try {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      await deleteDoc(docRef);
+      const docRef = doc(this.firestore, `${collectionPath}/${documentId}`);
+      const { deleteDoc } = await import('@angular/fire/firestore');
+      await deleteDoc(docRef as any);
     } catch (error) {
-      console.error(`Error al eliminar documento ${documentId}:`, error);
-      throw error;
-    }
-  }
-
-  // ========================================
-  // MÉTODOS DE LECTURA
-  // ========================================
-
-  /**
-   * Obtiene un documento por ID
-   */
-  async getById<T>(collectionPath: string, documentId: string): Promise<T | null> {
-    try {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      const docSnap = await getDoc(docRef);
-      
-      if (docSnap.exists()) {
-        return { id: docSnap.id, ...docSnap.data() } as T;
-      }
-      return null;
-    } catch (error) {
-      console.error(`Error al obtener documento ${documentId}:`, error);
+      console.error(`[FirestoreService] delete failed: ${collectionPath}/${documentId}`, error);
       throw error;
     }
   }
 
   /**
-   * Obtiene todos los documentos de una colección
+   * Ejecuta múltiples operaciones en batch (transacción atomizada)
+   * Agrupa set, update y delete en una sola escritura
    */
-  async getAll<T>(collectionPath: string): Promise<T[]> {
-    try {
-      const colRef = collection(this.firestore, collectionPath);
-      const snapshot = await getDocs(colRef);
-      
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as T[];
-    } catch (error) {
-      console.error(`Error al obtener documentos de ${collectionPath}:`, error);
-      throw error;
+  async executeBatch(operations: BatchOperation[]): Promise<void> {
+    if (operations.length === 0) {
+      return;
     }
-  }
 
-  /**
-   * Obtiene documentos con filtros personalizados
-   */
-  async getWhere<T>(
-    collectionPath: string,
-    ...queryConstraints: QueryConstraint[]
-  ): Promise<T[]> {
-    try {
-      const colRef = collection(this.firestore, collectionPath);
-      const q = query(colRef, ...queryConstraints);
-      const snapshot = await getDocs(q);
-      
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as T[];
-    } catch (error) {
-      console.error(`Error en query de ${collectionPath}:`, error);
-      throw error;
-    }
-  }
-
-  // ========================================
-  // MÉTODOS EN TIEMPO REAL (OBSERVABLES)
-  // ========================================
-
-  /**
-   * Observa cambios en un documento específico
-   */
-  watchDocument<T>(collectionPath: string, documentId: string): Observable<T | null> {
-    return new Observable(observer => {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      
-      const unsubscribe = onSnapshot(
-        docRef,
-        (snapshot) => {
-          if (snapshot.exists()) {
-            observer.next({ id: snapshot.id, ...snapshot.data() } as T);
-          } else {
-            observer.next(null);
-          }
-        },
-        (error) => {
-          console.error(`Error en snapshot de ${documentId}:`, error);
-          observer.error(error);
-        }
-      );
-
-      // Cleanup
-      return () => unsubscribe();
-    });
-  }
-
-  /**
-   * Observa cambios en una colección completa
-   */
-  watchCollection<T>(collectionPath: string): Observable<T[]> {
-    return new Observable(observer => {
-      const colRef = collection(this.firestore, collectionPath);
-      
-      const unsubscribe = onSnapshot(
-        colRef,
-        (snapshot) => {
-          const data = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          })) as T[];
-          observer.next(data);
-        },
-        (error) => {
-          console.error(`Error en snapshot de ${collectionPath}:`, error);
-          observer.error(error);
-        }
-      );
-
-      // Cleanup
-      return () => unsubscribe();
-    });
-  }
-
-  /**
-   * Observa cambios en una colección con filtros
-   */
-  watchQuery<T>(
-    collectionPath: string,
-    ...queryConstraints: QueryConstraint[]
-  ): Observable<T[]> {
-    return new Observable(observer => {
-      const colRef = collection(this.firestore, collectionPath);
-      const q = query(colRef, ...queryConstraints);
-      
-      const unsubscribe = onSnapshot(
-        q,
-        (snapshot) => {
-          const data = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          })) as T[];
-          observer.next(data);
-        },
-        (error) => {
-          console.error(`Error en query snapshot de ${collectionPath}:`, error);
-          observer.error(error);
-        }
-      );
-
-      // Cleanup
-      return () => unsubscribe();
-    });
-  }
-
-  // ========================================
-  // OPERACIONES BATCH (TRANSACCIONALES)
-  // ========================================
-
-  /**
-   * Ejecuta múltiples operaciones en una transacción
-   * Máximo 500 operaciones por batch
-   */
-  async executeBatch(operations: Array<{
-    type: 'set' | 'update' | 'delete';
-    collectionPath: string;
-    documentId: string;
-    data?: any;
-  }>): Promise<void> {
     try {
       const batch = writeBatch(this.firestore);
 
-      operations.forEach(op => {
-        const docRef = doc(this.firestore, op.collectionPath, op.documentId);
+      for (const op of operations) {
+        const docRef = doc(this.firestore, `${op.collectionPath}/${op.documentId}`);
 
-        switch (op.type) {
-          case 'set':
-            batch.set(docRef, {
-              ...op.data,
-              updatedAt: serverTimestamp()
-            });
-            break;
-          case 'update':
-            batch.update(docRef, {
-              ...op.data,
-              updatedAt: serverTimestamp()
-            });
-            break;
-          case 'delete':
-            batch.delete(docRef);
-            break;
+        if (op.type === 'set') {
+          batch.set(docRef as any, this._normalizeData(op.data), { merge: false });
+        } else if (op.type === 'update') {
+          batch.update(docRef as any, this._normalizeData(op.data));
+        } else if (op.type === 'delete') {
+          batch.delete(docRef as any);
         }
-      });
+      }
 
       await batch.commit();
+      console.log(`[FirestoreService] executeBatch completed: ${operations.length} operations`);
     } catch (error) {
-      console.error('Error en operación batch:', error);
+      console.error(`[FirestoreService] executeBatch failed:`, error);
       throw error;
     }
   }
 
-  // ========================================
-  // MÉTODOS AUXILIARES
-  // ========================================
+  // -------------------------
+  // Helpers
+  // -------------------------
 
   /**
-   * Verifica si un documento existe
+   * Normaliza datos para Firestore: elimina "undefined" y convierte Date a ISO
    */
-  async exists(collectionPath: string, documentId: string): Promise<boolean> {
-    try {
-      const docRef = doc(this.firestore, collectionPath, documentId);
-      const docSnap = await getDoc(docRef);
-      return docSnap.exists();
-    } catch (error) {
-      console.error(`Error al verificar existencia de ${documentId}:`, error);
-      return false;
-    }
-  }
-
-  /**
-   * Cuenta documentos en una colección (aproximado)
-   * Nota: Firestore no tiene count nativo eficiente
-   */
-  async count(collectionPath: string, ...queryConstraints: QueryConstraint[]): Promise<number> {
-    try {
-      const colRef = collection(this.firestore, collectionPath);
-      const q = queryConstraints.length > 0 
-        ? query(colRef, ...queryConstraints) 
-        : colRef;
-      
-      const snapshot = await getDocs(q);
-      return snapshot.size;
-    } catch (error) {
-      console.error(`Error al contar documentos de ${collectionPath}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Obtiene referencia a una colección
-   */
-  getCollectionRef(collectionPath: string): CollectionReference {
-    return collection(this.firestore, collectionPath);
-  }
-
-  /**
-   * Obtiene referencia a un documento
-   */
-  getDocRef(collectionPath: string, documentId: string): DocumentReference {
-    return doc(this.firestore, collectionPath, documentId);
-  }
-
-  /**
-   * Genera un ID único para un documento
-   */
-  generateId(collectionPath: string): string {
-    const colRef = collection(this.firestore, collectionPath);
-    return doc(colRef).id;
-  }
-
-  // ========================================
-  // AYUDANTES PARA QUERIES
-  // ========================================
-
-  /**
-   * Crea un constraint WHERE
-   */
-  createWhereConstraint(field: string, operator: any, value: any): QueryConstraint {
-    return where(field, operator, value);
-  }
-
-  /**
-   * Crea un constraint ORDER BY
-   */
-  createOrderByConstraint(field: string, direction: 'asc' | 'desc' = 'asc'): QueryConstraint {
-    return orderBy(field, direction);
-  }
-
-  /**
-   * Crea un constraint LIMIT
-   */
-  createLimitConstraint(limitCount: number): QueryConstraint {
-    return limit(limitCount);
+  private _normalizeData<T = any>(obj: T): DocumentData {
+    const copy: any = {};
+    Object.keys(obj || {}).forEach(key => {
+      const v = (obj as any)[key];
+      if (v === undefined) return; // omit undefined
+      if (v instanceof Date) {
+        copy[key] = v; // Firestore SDK acepta Date
+      } else {
+        copy[key] = v;
+      }
+    });
+    return copy;
   }
 }

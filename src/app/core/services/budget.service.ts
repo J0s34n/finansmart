@@ -66,7 +66,7 @@ export class BudgetService {
         }
       }),
       map(budgets => 
-        budgets.map(b => BudgetModel.fromFirebase(b))
+        budgets.map((b: Budget) => BudgetModel.fromFirebase(b))
       )
     ).subscribe(budgets => {
       this.budgetsSubject.next(budgets);

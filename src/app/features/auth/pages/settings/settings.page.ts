@@ -226,20 +226,23 @@ export class SettingsPage implements OnInit, OnDestroy {
    * Actualiza una preferencia del usuario
    */
   private async updatePreference(key: string, value: any): Promise<void> {
-    try {
-      if (key === 'notifications') {
-        await this.authService.updatePreferences({ notifications: value });
-      } else {
-        await this.authService.updatePreferences({ [key]: value });
-      }
-
-      await this.showToast('Configuración actualizada', 'success');
-
-    } catch (error: any) {
-      console.error('Error al actualizar preferencia:', error);
-      await this.showToast('Error al actualizar configuración', 'danger');
+   try {
+    if (key === 'notifications') {
+      await this.authService.updatePreferences({ notifications: value });
+    } else {
+      await this.authService.updatePreferences({ [key]: value });
     }
+
+    // ✅ Recargar usuario
+    await this.authService.reloadCurrentUser();
+    
+    await this.showToast('Configuración actualizada', 'success');
+
+  } catch (error: any) {
+    console.error('Error al actualizar preferencia:', error);
+    await this.showToast('Error al actualizar configuración', 'danger');
   }
+}
 
   /**
    * Aplica el tema seleccionado

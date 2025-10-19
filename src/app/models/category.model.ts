@@ -23,6 +23,7 @@ export interface Category {
   userId?: string;                // ID del usuario (si es personalizada)
   isDefault: boolean;             // Si es categoría predeterminada del sistema
   createdAt: Date;                // Fecha de creación
+  updatedAt?: Date;               // Última actualización (opcional)
 }
 
 /**
@@ -37,6 +38,7 @@ export class CategoryModel implements Category {
   userId?: string;
   isDefault: boolean;
   createdAt: Date;
+  updatedAt?: Date;
 
   constructor(data: Partial<Category>) {
     this.id = data.id || this.generateId();
@@ -47,6 +49,7 @@ export class CategoryModel implements Category {
     this.userId = data.userId;
     this.isDefault = data.isDefault || false;
     this.createdAt = data.createdAt || new Date();
+    this.updatedAt = data.updatedAt;
   }
 
   /**
@@ -60,16 +63,26 @@ export class CategoryModel implements Category {
    * Convierte a formato JSON para Firebase
    */
   toJSON(): any {
-    return {
+    const data: any = {
       id: this.id,
       name: this.name,
       type: this.type,
       icon: this.icon,
       color: this.color,
-      userId: this.userId,
       isDefault: this.isDefault,
       createdAt: this.createdAt.toISOString()
     };
+
+    // Agregar propiedades opcionales solo si existen
+    if (this.userId) {
+      data.userId = this.userId;
+    }
+
+    if (this.updatedAt) {
+      data.updatedAt = this.updatedAt.toISOString();
+    }
+
+    return data;
   }
 
   /**
@@ -78,7 +91,8 @@ export class CategoryModel implements Category {
   static fromFirebase(data: any): CategoryModel {
     return new CategoryModel({
       ...data,
-      createdAt: data.createdAt ? new Date(data.createdAt) : new Date()
+      createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
+      updatedAt: data.updatedAt ? new Date(data.updatedAt) : undefined
     });
   }
 

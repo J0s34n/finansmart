@@ -62,7 +62,8 @@ export class TransactionService {
         }
       }),
       map(transactions => 
-        transactions.map(t => TransactionModel.fromFirebase(t))
+        transactions.map((t: Transaction) => 
+          TransactionModel.fromFirebase(t))
       )
     ).subscribe(transactions => {
       this.transactionsSubject.next(transactions);
@@ -94,9 +95,20 @@ export class TransactionService {
     }
 
     try {
+      const transactionData = transaction.toJSON();
+       if (!transactionData || typeof transactionData !== 'object') {
+        throw new Error('Error al convertir la transacción a formato JSON.');
+        }
+
+      //filtrar campos undefined
+      Object.keys(transactionData).forEach(key => {
+        if (transactionData[key] === undefined) {
+          delete transactionData[key];
+        }
+      });
       const docId = await this.firestoreService.add(
         this.COLLECTION_PATH,
-        transaction.toJSON()
+        transactionData
       );
 
       console.log('Transacción agregada:', docId);

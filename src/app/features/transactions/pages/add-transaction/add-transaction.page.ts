@@ -61,11 +61,9 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './add-transaction.page.html',
   styleUrls: ['./add-transaction.page.scss'],
   standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,
@@ -107,8 +105,11 @@ export class AddTransactionPage implements OnInit, OnDestroy {
   isLoading = false;
   isUploading = false;
 
-  compareCategories(a: any, b: any): boolean {
-  return a && b ? a.id === b.id : a === b;
+/**
+ * Compara categorías por ID
+ */
+compareCategories(c1: CategoryModel, c2: CategoryModel): boolean {
+  return c1 && c2 ? c1.id === c2.id : c1 === c2;
 }
 
   private destroy$ = new Subject<void>();
@@ -167,7 +168,8 @@ export class AddTransactionPage implements OnInit, OnDestroy {
       ]],
       date: [new Date().toISOString().split('T')[0], [
         Validators.required
-      ]]
+      ]],
+      category: ['', [Validators.required]]
     });
   }
 
@@ -342,7 +344,7 @@ export class AddTransactionPage implements OnInit, OnDestroy {
 
       const transaction = new TransactionModel({
         userId,
-        type: this.transactionType,
+        type: this.transactionType as CategoryType,
         amount: parseFloat(amount),
         currency: this.authService.getCurrentUser()?.preferences.currency || 'MXN',
         categoryId: this.selectedCategory!.id,

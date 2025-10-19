@@ -7,12 +7,14 @@ import {
   UrlTree 
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, skipWhile, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 /**
  * Guard para proteger rutas que requieren autenticación
  * Si el usuario NO está autenticado, redirige a /login
+ * 
+ * Espera a que Firebase termine de inicializar antes de verificar
  * 
  * Uso en el routing:
  * {
@@ -36,11 +38,16 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
-    return this.authService.isAuthenticated$.pipe(
+    // ✅ Esperar a que Firebase termine de inicializar (loading$ = false)
+    return this.authService.loading$.pipe(
+      // Saltar mientras loading sea true, tomar el primer false
+      skipWhile(loading => loading),
       take(1),
-      map(isAuthenticated => {
-        if (isAuthenticated) {
+      // Ahora verificar autenticación
+      map(() => {
+        if (this.authService.isAuthenticated()) {
           // Usuario autenticado, permitir acceso
+          console.log('AuthGuard: Usuario autenticado, permitiendo acceso');
           return true;
         } else {
           // Usuario no autenticado, redirigir a login

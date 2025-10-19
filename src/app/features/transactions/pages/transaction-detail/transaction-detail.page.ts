@@ -21,11 +21,9 @@ import {
   IonCol,
   IonSpinner,
   IonChip,
-  IonAlert,
   AlertController,
   LoadingController,
-  ToastController,
-  ModalController
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -45,7 +43,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { TransactionService } from '@app/core/services/transaction.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { TransactionModel, CategoryType } from '@app/models';
-import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -55,7 +52,6 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
     IonContent,
     IonHeader,
     IonTitle,
@@ -74,8 +70,7 @@ import { IonicModule } from '@ionic/angular';
     IonRow,
     IonCol,
     IonSpinner,
-    IonChip,
-    IonAlert
+    IonChip
   ]
 })
 export class TransactionDetailPage implements OnInit, OnDestroy {
@@ -95,7 +90,6 @@ export class TransactionDetailPage implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private toastController: ToastController
   ) {
-    // Registrar iconos
     addIcons({
       arrowBackOutline,
       trashOutline,
@@ -120,56 +114,69 @@ export class TransactionDetailPage implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Carga el detalle de la transacción
-   */
   private loadTransactionDetail(): void {
     this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe(async params => {
         this.transactionId = params['id'];
         
-        if (this.transactionId) {
-          try {
-            const transaction = await this.transactionService.getTransactionById(
-              this.transactionId
-            );
+        console.log('TransactionDetailPage - ID recibido:', this.transactionId);
+        
+        if (!this.transactionId || this.transactionId.trim() === '') {
+          console.error('ID de transacción inválido');
+          await this.showToast('ID de transacción inválido', 'danger');
+          this.goBack();
+          return;
+        }
 
-            if (transaction) {
-              this.transaction = transaction;
-            } else {
-              await this.showToast('Transacción no encontrada', 'danger');
-              this.goBack();
-            }
-          } catch (error) {
-            console.error('Error al cargar transacción:', error);
-            await this.showToast('Error al cargar la transacción', 'danger');
-            this.goBack();
-          } finally {
-            this.loading = false;
+        try {
+          console.log('Buscando transacción con ID:', this.transactionId);
+          
+          // DEBUG: Ver todas las transacciones disponibles
+          const allTxns = this.transactionService.getAllTransactions();
+          console.log('Todas las transacciones disponibles:', allTxns);
+          console.log('IDs disponibles:', allTxns.map(t => t.id));
+          
+          const transaction = await this.transactionService.getTransactionById(
+            this.transactionId
+          );
+
+          console.log('Transacción encontrada:', transaction);
+
+          if (transaction) {
+            this.transaction = transaction;
+            console.log('Transacción cargada exitosamente:', this.transaction);
+          } else {
+            console.warn('No se encontró transacción con ID:', this.transactionId);
+            console.log('Transacciones disponibles:', this.transactionService.transactions$);
+            
+            await this.showToast('Transacción no encontrada', 'danger');
+            
+            // Esperar 1 segundo antes de ir atrás
+            setTimeout(() => this.goBack(), 1000);
           }
+        } catch (error: any) {
+          console.error('Error al cargar transacción:', error);
+          console.error('Stack:', error.stack);
+          
+          await this.showToast('Error al cargar la transacción: ' + error.message, 'danger');
+          
+          setTimeout(() => this.goBack(), 1000);
+        } finally {
+          this.loading = false;
         }
       });
   }
 
-  /**
-   * Vuelve atrás
-   */
   goBack(): void {
+    console.log('Navegando de vuelta a transacciones');
     this.router.navigate(['/transactions']);
   }
 
-  /**
-   * Edita la transacción
-   */
   async editTransaction(): Promise<void> {
-    // Implementar en próxima versión
     await this.showToast('Edición próximamente disponible', 'warning');
   }
 
-  /**
-   * Elimina la transacción
-   */
   async deleteTransaction(): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Eliminar Transacción',
@@ -192,9 +199,6 @@ export class TransactionDetailPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  /**
-   * Realiza la eliminación
-   */
   private async performDelete(): Promise<void> {
     if (!this.transaction) return;
 
@@ -216,9 +220,6 @@ export class TransactionDetailPage implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Comparte la transacción
-   */
   async shareTransaction(): Promise<void> {
     if (!this.transaction) return;
 
@@ -243,25 +244,16 @@ Fecha: ${this.transaction.getFormattedDate()}
     }
   }
 
-  /**
-   * Abre/cierra la vista de recibo
-   */
   toggleReceipt(): void {
     this.showReceipt = !this.showReceipt;
   }
 
-  /**
-   * Abre el recibo en pantalla completa
-   */
   openReceiptFullscreen(): void {
     if (this.transaction?.receiptUrl) {
       window.open(this.transaction.receiptUrl, '_blank');
     }
   }
 
-  /**
-   * Copia el monto al portapapeles
-   */
   async copyAmount(): Promise<void> {
     if (!this.transaction) return;
 
@@ -276,9 +268,6 @@ Fecha: ${this.transaction.getFormattedDate()}
     }
   }
 
-  /**
-   * Copia la descripción al portapapeles
-   */
   async copyDescription(): Promise<void> {
     if (!this.transaction) return;
 
@@ -291,9 +280,6 @@ Fecha: ${this.transaction.getFormattedDate()}
     }
   }
 
-  /**
-   * Formatea un monto
-   */
   formatAmount(amount: number, type: CategoryType): string {
     const currency = this.authService.getCurrentUser()?.preferences.currency || 'MXN';
     const formatted = new Intl.NumberFormat('es-MX', {
@@ -304,51 +290,30 @@ Fecha: ${this.transaction.getFormattedDate()}
     return `${type === CategoryType.INCOME ? '+' : '-'}${formatted}`;
   }
 
-  /**
-   * Obtiene el color del tipo
-   */
   getTypeColor(type: CategoryType): string {
     return type === CategoryType.INCOME ? 'success' : 'danger';
   }
 
-  /**
-   * Obtiene el icono del tipo
-   */
   getTypeIcon(type: CategoryType): string {
     return type === CategoryType.INCOME ? 'arrow-up-outline' : 'arrow-down-outline';
   }
 
-  /**
-   * Obtiene el texto del tipo
-   */
   getTypeLabel(type: CategoryType): string {
     return type === CategoryType.INCOME ? 'Ingreso' : 'Gasto';
   }
 
-  /**
-   * Verifica si la transacción tiene recibo
-   */
   hasReceipt(): boolean {
     return !!this.transaction?.receiptUrl;
   }
 
-  /**
-   * Verifica si la transacción tiene notas
-   */
   hasNotes(): boolean {
     return !!this.transaction?.notes && this.transaction.notes.trim().length > 0;
   }
 
-  /**
-   * Verifica si la transacción tiene tags
-   */
   hasTags(): boolean {
     return !!this.transaction?.tags && this.transaction.tags.length > 0;
   }
 
-  /**
-   * Muestra un toast
-   */
   private async showToast(message: string, color: 'success' | 'danger' | 'warning'): Promise<void> {
     const toast = await this.toastController.create({
       message,
@@ -359,25 +324,16 @@ Fecha: ${this.transaction.getFormattedDate()}
     await toast.present();
   }
 
-  /**
-   * Obtiene la edad de la transacción
-   */
   getTransactionAge(): string {
     if (!this.transaction) return '';
     return this.transaction.getRelativeTime(this.transaction.date);
   }
 
-  /**
-   * Verifica si es de hoy
-   */
   isToday(): boolean {
     if (!this.transaction) return false;
     return this.transaction.isToday();
   }
 
-  /**
-   * Verifica si es de este mes
-   */
   isThisMonth(): boolean {
     if (!this.transaction) return false;
     return this.transaction.isThisMonth();

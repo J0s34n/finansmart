@@ -60,7 +60,46 @@ export interface TransactionStats {
  */
 export class TransactionModel implements Transaction {
   getRelativeTime(date: Date): string {
-    throw new Error('Method not implemented.');
+    if (!date) return 'Fecha desconocida';
+
+    const now = new Date();
+    const transactionDate = new Date(date);
+    const diffMs = now.getTime() - transactionDate.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    const diffWeeks = Math.floor(diffDays / 7);
+    const diffMonths = Math.floor(diffDays / 30);
+    const diffYears = Math.floor(diffDays / 365);
+
+    // Hace menos de un minuto
+    if (diffMins < 1) {
+      return 'hace unos segundos';
+    }
+    // Hace minutos
+    if (diffMins < 60) {
+      return `hace ${diffMins} ${diffMins === 1 ? 'minuto' : 'minutos'}`;
+    }
+    // Hace horas
+    if (diffHours < 24) {
+      return `hace ${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
+    }
+    // Hace días
+    if (diffDays < 7) {
+      return `hace ${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
+    }
+    // Hace semanas
+    if (diffWeeks < 4) {
+      return `hace ${diffWeeks} ${diffWeeks === 1 ? 'semana' : 'semanas'}`;
+    }
+    // Hace meses
+    if (diffMonths < 12) {
+      return `hace ${diffMonths} ${diffMonths === 1 ? 'mes' : 'meses'}`;
+    }
+    // Hace años
+    return `hace ${diffYears} ${diffYears === 1 ? 'año' : 'años'}`;
+    
   }
   id: string;
   userId: string;
@@ -75,6 +114,7 @@ export class TransactionModel implements Transaction {
   date: Date;
   notes?: string;
   receiptUrl?: string;
+  receiptDeleteUrl?: string;
   tags?: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -111,7 +151,7 @@ export class TransactionModel implements Transaction {
    * Convierte a formato JSON para Firebase
    */
   toJSON(): any {
-    return {
+    const json: any = {
       id: this.id,
       userId: this.userId,
       type: this.type,
@@ -123,13 +163,27 @@ export class TransactionModel implements Transaction {
       categoryColor: this.categoryColor,
       description: this.description,
       date: this.date.toISOString(),
-      notes: this.notes,
-      receiptUrl: this.receiptUrl,
-      tags: this.tags,
       createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString(),
-      syncedAt: this.syncedAt?.toISOString()
+      updatedAt: this.updatedAt.toISOString()
     };
+
+    // Agregar campos opcionales si existen
+    if (this.notes) {
+      json.notes = this.notes;
+    }
+    if (this.receiptUrl) {
+      json.receiptUrl = this.receiptUrl;
+    }
+    if (this.receiptDeleteUrl) {
+      json.receiptDeleteUrl = this.receiptDeleteUrl;
+    }
+    if (this.tags && this.tags.length > 0) {
+      json.tags = this.tags;
+    }
+    if (this.syncedAt) {
+      json.syncedAt = this.syncedAt.toISOString();
+    }
+    return json;
   }
 
   /**

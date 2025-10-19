@@ -70,11 +70,13 @@
               formControlName="category"
               (ionChange)="onCategoryChange($event)"
               [compareWith]="compareCategories"
+              [value]="selectedCategory?.id"
+              placeholder="Selecciona una categoría"
               [disabled]="isLoading">
               <ion-select-option 
                 *ngFor="let category of categories"
                 [value]="category.id"
-                [selected]="selectedCategory?.id === category.id">
+                >
                 <div class="category-option">
                   <ion-icon [name]="category.icon"></ion-icon>
                   {{ category.name }}

@@ -146,40 +146,37 @@ export class CategoryService {
   /**
    * Crea una nueva categoría personalizada
    */
-  async createCategory(category: CategoryModel): Promise<string> {
+async createCategory(category: CategoryModel): Promise<string> {
+  try {
     const userId = this.authService.getCurrentUserId();
     if (!userId) {
       throw new Error('Usuario no autenticado');
     }
 
-    // Validar categoría
-    if (!category.isValid()) {
-      throw new Error('Categoría inválida. Verifica los campos requeridos.');
-    }
-
-    // Asegurar que sea una categoría personalizada
     category.userId = userId;
-    category.isDefault = false;
     category.createdAt = new Date();
+    category.updatedAt = new Date();
 
-    try {
-      // Usar el ID generado por el modelo o crear uno nuevo
-      const categoryId = category.id || this.firestoreService.generateId(this.COLLECTION_PATH);
-      
-      await this.firestoreService.set(
-        this.COLLECTION_PATH,
-        categoryId,
-        category.toJSON()
-      );
+    // ✅ IMPORTANTE: Filtrar undefined
+    const categoryData = category.toJSON();
+    Object.keys(categoryData).forEach(key => {
+      if (categoryData[key] === undefined) {
+        delete categoryData[key];
+      }
+    });
 
-      console.log('Categoría creada:', categoryId);
-      return categoryId;
-    } catch (error) {
-      console.error('Error al crear categoría:', error);
-      throw error;
-    }
+    const docId = await this.firestoreService.add(
+      this.COLLECTION_PATH,
+      categoryData
+    );
+
+    console.log('Categoría agregada:', docId);
+    return docId;
+  } catch (error) {
+    console.error('Error al agregar categoría:', error);
+    throw error;
   }
-
+}
   /**
    * Actualiza una categoría personalizada
    */
