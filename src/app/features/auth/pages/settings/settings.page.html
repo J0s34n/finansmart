@@ -16,204 +16,210 @@
   </div>
 
   <!-- Settings Content -->
-  <div class="settings-container" *ngIf="!loading && user">
+  <div class="settings-container" *ngIf="!loading && user && settingsForm">
+    
+    <!-- ⬇️ FORMULARIO INICIA AQUÍ -->
+    <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
 
-    <!-- General Settings -->
-    <ion-card class="settings-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="settings-outline"></ion-icon>
-          Configuración General
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
+      <!-- General Settings -->
+      <ion-card class="settings-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="settings-outline"></ion-icon>
+            Configuración General
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
 
-        <!-- Currency Selection -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span class="label-text">Moneda</span>
-            <span class="label-description">Moneda principal de la aplicación</span>
+          <!-- Currency Selection -->
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label-text">Moneda</span>
+              <span class="label-description">Moneda principal de la aplicación</span>
+            </div>
+            <ion-select 
+              formControlName="currency"
+              class="currency-select"
+              (ionChange)="onCurrencyChange($event)">
+              <ion-select-option value="MXN">Mexican Peso (MXN) - $</ion-select-option>
+              <ion-select-option value="USD">US Dollar (USD) - $</ion-select-option>
+              <ion-select-option value="EUR">Euro (EUR) - €</ion-select-option>
+              <ion-select-option value="GBP">British Pound (GBP) - £</ion-select-option>
+            </ion-select>
           </div>
-          <ion-select 
-            formControlName="currency"
-            class="currency-select"
-            (ionChange)="onCurrencyChange($event)">
-            <ion-select-option value="MXN">Mexican Peso (MXN) - $</ion-select-option>
-            <ion-select-option value="USD">US Dollar (USD) - $</ion-select-option>
-            <ion-select-option value="EUR">Euro (EUR) - €</ion-select-option>
-            <ion-select-option value="GBP">British Pound (GBP) - £</ion-select-option>
-          </ion-select>
-        </div>
 
-        <!-- Language Selection -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span class="label-text">Idioma</span>
-            <span class="label-description">Idioma de la interfaz</span>
+          <!-- Language Selection -->
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label-text">Idioma</span>
+              <span class="label-description">Idioma de la interfaz</span>
+            </div>
+            <ion-select 
+              formControlName="language"
+              class="language-select"
+              (ionChange)="onLanguageChange($event)">
+              <ion-select-option value="es">Español</ion-select-option>
+              <ion-select-option value="en">English</ion-select-option>
+            </ion-select>
           </div>
-          <ion-select 
-            formControlName="language"
-            class="language-select"
-            (ionChange)="onLanguageChange($event)">
-            <ion-select-option value="es">Español</ion-select-option>
-            <ion-select-option value="en">English</ion-select-option>
-          </ion-select>
-        </div>
 
-        <!-- Theme Selection -->
-        <div class="setting-item">
-          <div class="setting-label">
-            <span class="label-text">Tema</span>
-            <span class="label-description">Apariencia de la aplicación</span>
+          <!-- Theme Selection -->
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="label-text">Tema</span>
+              <span class="label-description">Apariencia de la aplicación</span>
+            </div>
+            <ion-segment 
+              formControlName="theme"
+              (ionChange)="onThemeChange($event)">
+              <ion-segment-button value="light">
+                <ion-icon name="sunny-outline"></ion-icon>
+                <ion-label>Claro</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="dark">
+                <ion-icon name="moon-outline"></ion-icon>
+                <ion-label>Oscuro</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="auto">
+                <ion-icon name="settings-outline"></ion-icon>
+                <ion-label>Auto</ion-label>
+              </ion-segment-button>
+            </ion-segment>
           </div>
-          <ion-segment 
-            formControlName="theme"
-            (ionChange)="onThemeChange($event)">
-            <ion-segment-button value="light">
-              <ion-icon name="sunny-outline"></ion-icon>
-              <ion-label>Claro</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="dark">
-              <ion-icon name="moon-outline"></ion-icon>
-              <ion-label>Oscuro</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="auto">
-              <ion-icon name="settings-outline"></ion-icon>
-              <ion-label>Auto</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-        </div>
 
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
 
-    <!-- Notification Settings -->
-    <ion-card class="settings-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="notifications-outline"></ion-icon>
-          Notificaciones
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
+      <!-- Notification Settings -->
+      <ion-card class="settings-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="notifications-outline"></ion-icon>
+            Notificaciones
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
 
-        <!-- Enable Notifications -->
-        <div class="setting-item toggle-item">
-          <div class="setting-label">
-            <span class="label-text">Notificaciones Activadas</span>
-            <span class="label-description">Recibir notificaciones de la app</span>
+          <!-- Enable Notifications -->
+          <div class="setting-item toggle-item">
+            <div class="setting-label">
+              <span class="label-text">Notificaciones Activadas</span>
+              <span class="label-description">Recibir notificaciones de la app</span>
+            </div>
+            <ion-toggle 
+              formControlName="notificationsEnabled"
+              (ionChange)="onNotificationsToggle($event)">
+            </ion-toggle>
           </div>
-          <ion-toggle 
-            formControlName="notificationsEnabled"
-            (ionChange)="onNotificationsToggle($event)">
-          </ion-toggle>
-        </div>
 
-        <!-- Budget Alerts Toggle -->
-        <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
-          <div class="setting-label">
-            <span class="label-text">Alertas de Presupuesto</span>
-            <span class="label-description">Notificaciones cuando se aproxima al límite</span>
+          <!-- Budget Alerts Toggle -->
+          <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
+            <div class="setting-label">
+              <span class="label-text">Alertas de Presupuesto</span>
+              <span class="label-description">Notificaciones cuando se aproxima al límite</span>
+            </div>
+            <ion-toggle 
+              formControlName="budgetAlerts"
+              (ionChange)="onBudgetAlertsToggle($event)">
+            </ion-toggle>
           </div>
-          <ion-toggle 
-            formControlName="budgetAlerts"
-            (ionChange)="onBudgetAlertsToggle($event)">
-          </ion-toggle>
-        </div>
 
-        <!-- Daily Reminders Toggle -->
-        <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
-          <div class="setting-label">
-            <span class="label-text">Recordatorios Diarios</span>
-            <span class="label-description">Recordar registrar transacciones</span>
+          <!-- Daily Reminders Toggle -->
+          <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
+            <div class="setting-label">
+              <span class="label-text">Recordatorios Diarios</span>
+              <span class="label-description">Recordar registrar transacciones</span>
+            </div>
+            <ion-toggle 
+              formControlName="dailyReminders"
+              (ionChange)="onDailyRemindersToggle($event)">
+            </ion-toggle>
           </div>
-          <ion-toggle 
-            formControlName="dailyReminders"
-            (ionChange)="onDailyRemindersToggle($event)">
-          </ion-toggle>
-        </div>
 
-        <!-- Weekly Reports Toggle -->
-        <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
-          <div class="setting-label">
-            <span class="label-text">Reportes Semanales</span>
-            <span class="label-description">Resumen semanal de finanzas</span>
+          <!-- Weekly Reports Toggle -->
+          <div class="setting-item toggle-item" *ngIf="user.preferences.notifications.enabled">
+            <div class="setting-label">
+              <span class="label-text">Reportes Semanales</span>
+              <span class="label-description">Resumen semanal de finanzas</span>
+            </div>
+            <ion-toggle 
+              formControlName="weeklyReports"
+              (ionChange)="onWeeklyReportsToggle($event)">
+            </ion-toggle>
           </div>
-          <ion-toggle 
-            formControlName="weeklyReports"
-            (ionChange)="onWeeklyReportsToggle($event)">
-          </ion-toggle>
-        </div>
 
-        <!-- Budget Alert Threshold -->
-        <div class="setting-item" *ngIf="user.preferences.notifications.budgetAlerts">
-          <div class="setting-label">
-            <span class="label-text">Umbral de Alerta</span>
-            <span class="label-description">Alertar cuando se use el {{ settingsForm.get('budgetAlertThreshold')?.value || 80 }}% del presupuesto</span>
+          <!-- Budget Alert Threshold -->
+          <div class="setting-item" *ngIf="user.preferences.notifications.budgetAlerts">
+            <div class="setting-label">
+              <span class="label-text">Umbral de Alerta</span>
+              <span class="label-description">Alertar cuando se use el {{ settingsForm.get('budgetAlertThreshold')?.value || 80 }}% del presupuesto</span>
+            </div>
+            <ion-range 
+              formControlName="budgetAlertThreshold"
+              min="50"
+              max="100"
+              step="5"
+              [value]="user.preferences.budgetAlertThreshold"
+              (ionChange)="onBudgetThresholdChange($event)">
+              <ion-label slot="start">50%</ion-label>
+              <ion-label slot="end">100%</ion-label>
+            </ion-range>
           </div>
-          <ion-range 
-            formControlName="budgetAlertThreshold"
-            min="50"
-            max="100"
-            step="5"
-            [value]="user.preferences.budgetAlertThreshold"
-            (ionChange)="onBudgetThresholdChange($event)">
-            <ion-label slot="start">50%</ion-label>
-            <ion-label slot="end">100%</ion-label>
-          </ion-range>
-        </div>
 
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
 
-    <!-- About App -->
-    <ion-card class="settings-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="information-circle-outline"></ion-icon>
-          Acerca de
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
+      <!-- About App -->
+      <ion-card class="settings-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="information-circle-outline"></ion-icon>
+            Acerca de
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
 
-        <div class="setting-item">
-          <span class="label-text">Versión de la App</span>
-          <span class="value">1.0.0</span>
-        </div>
+          <div class="setting-item">
+            <span class="label-text">Versión de la App</span>
+            <span class="value">1.0.0</span>
+          </div>
 
-        <div class="setting-item">
-          <span class="label-text">Desenvolvedor</span>
-          <span class="value">FinanSmart Team</span>
-        </div>
+          <div class="setting-item">
+            <span class="label-text">Desenvolvedor</span>
+            <span class="value">FinanSmart Team</span>
+          </div>
 
-        <div class="setting-item">
-          <ion-button expand="block" fill="outline" (click)="openPrivacyPolicy()">
-            <ion-icon name="document-text-outline" slot="start"></ion-icon>
-            Política de Privacidad
-          </ion-button>
-        </div>
+          <div class="setting-item">
+            <ion-button expand="block" fill="outline" (click)="openPrivacyPolicy()">
+              <ion-icon name="document-text-outline" slot="start"></ion-icon>
+              Política de Privacidad
+            </ion-button>
+          </div>
 
-        <div class="setting-item">
-          <ion-button expand="block" fill="outline" (click)="openTermsOfService()">
-            <ion-icon name="document-text-outline" slot="start"></ion-icon>
-            Términos de Servicio
-          </ion-button>
-        </div>
+          <div class="setting-item">
+            <ion-button expand="block" fill="outline" (click)="openTermsOfService()">
+              <ion-icon name="document-text-outline" slot="start"></ion-icon>
+              Términos de Servicio
+            </ion-button>
+          </div>
 
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
 
-    <!-- Logout Button -->
-    <div class="logout-section">
-      <ion-button 
-        expand="block"
-        color="danger"
-        (click)="logout()"
-        [disabled]="loading">
-        <ion-icon name="log-out-outline" slot="start"></ion-icon>
-        Cerrar Sesión
-      </ion-button>
-    </div>
+      <!-- Logout Button -->
+      <div class="logout-section">
+        <ion-button 
+          expand="block"
+          color="danger"
+          (click)="logout()"
+          [disabled]="loading">
+          <ion-icon name="log-out-outline" slot="start"></ion-icon>
+          Cerrar Sesión
+        </ion-button>
+      </div>
+
+    </form>
+    <!-- ⬆️ FORMULARIO TERMINA AQUÍ -->
 
   </div>
 

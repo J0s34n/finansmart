@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   IonContent,
@@ -39,12 +39,9 @@ import {
 } from 'ionicons/icons';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '@app/core/services/auth.service';
+import { SettingsService } from '@app/core/services/settings.service';
 import { UserModel } from '@app/models/user.model';
 
-/**
- * Página de Configuración
- * Permite al usuario personalizar la aplicación
- */
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -77,13 +74,14 @@ import { UserModel } from '@app/models/user.model';
 })
 export class SettingsPage implements OnInit, OnDestroy {
   user: UserModel | null = null;
-  settingsForm!: FormGroup;
+  settingsForm: FormGroup | null = null;
   loading = true;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
+    private settingsService: SettingsService,
     private formBuilder: FormBuilder,
     private router: Router,
     private alertController: AlertController,
@@ -117,28 +115,53 @@ export class SettingsPage implements OnInit, OnDestroy {
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.user = user;
-        this.initializeForm();
-        this.loading = false;
+        if (user) {
+          this.user = user;
+          this.initializeForm();
+          this.loading = false;
+        }
       });
   }
 
   /**
-   * Inicializa el formulario reactivo
+   * Inicializa el formulario reactivo CON valores por defecto
    */
   private initializeForm(): void {
     if (!this.user) return;
 
+    // Crear formulario con valores iniciales AHORA
     this.settingsForm = this.formBuilder.group({
-      currency: [this.user.preferences.currency],
-      language: [this.user.preferences.language],
-      theme: [this.user.preferences.theme],
-      notificationsEnabled: [this.user.preferences.notifications.enabled],
-      budgetAlerts: [this.user.preferences.notifications.budgetAlerts],
-      dailyReminders: [this.user.preferences.notifications.dailyReminders],
-      weeklyReports: [this.user.preferences.notifications.weeklyReports],
-      budgetAlertThreshold: [this.user.preferences.budgetAlertThreshold]
+      currency: [
+        this.user.preferences?.currency || 'MXN',
+        [Validators.required]
+      ],
+      language: [
+        this.user.preferences?.language || 'es',
+        [Validators.required]
+      ],
+      theme: [
+        this.user.preferences?.theme || 'auto',
+        [Validators.required]
+      ],
+      notificationsEnabled: [
+        this.user.preferences?.notifications?.enabled ?? true
+      ],
+      budgetAlerts: [
+        this.user.preferences?.notifications?.budgetAlerts ?? true
+      ],
+      dailyReminders: [
+        this.user.preferences?.notifications?.dailyReminders ?? true
+      ],
+      weeklyReports: [
+        this.user.preferences?.notifications?.weeklyReports ?? true
+      ],
+      budgetAlertThreshold: [
+        this.user.preferences?.budgetAlertThreshold || 80,
+        [Validators.required, Validators.min(50), Validators.max(100)]
+      ]
     });
+
+    console.log('Formulario inicializado:', this.settingsForm.value);
   }
 
   /**
@@ -147,6 +170,7 @@ export class SettingsPage implements OnInit, OnDestroy {
   async onCurrencyChange(event: any): Promise<void> {
     const currency = event.detail.value;
     await this.updatePreference('currency', currency);
+    this.settingsService.updateCurrency(currency);
   }
 
   /**
@@ -155,6 +179,7 @@ export class SettingsPage implements OnInit, OnDestroy {
   async onLanguageChange(event: any): Promise<void> {
     const language = event.detail.value;
     await this.updatePreference('language', language);
+    this.settingsService.updateLanguage(language);
   }
 
   /**
@@ -163,7 +188,7 @@ export class SettingsPage implements OnInit, OnDestroy {
   async onThemeChange(event: any): Promise<void> {
     const theme = event.detail.value;
     await this.updatePreference('theme', theme);
-    this.applyTheme(theme);
+    this.settingsService.updateTheme(theme);
   }
 
   /**
@@ -173,6 +198,10 @@ export class SettingsPage implements OnInit, OnDestroy {
     const enabled = event.detail.checked;
     
     await this.updatePreference('notifications', {
+      ...this.user?.preferences.notifications,
+      enabled
+    });
+    this.settingsService.updateNotifications({
       ...this.user?.preferences.notifications,
       enabled
     });
@@ -188,6 +217,10 @@ export class SettingsPage implements OnInit, OnDestroy {
       ...this.user?.preferences.notifications,
       budgetAlerts
     });
+    this.settingsService.updateNotifications({
+      ...this.user?.preferences.notifications,
+      budgetAlerts
+    });
   }
 
   /**
@@ -197,6 +230,10 @@ export class SettingsPage implements OnInit, OnDestroy {
     const dailyReminders = event.detail.checked;
 
     await this.updatePreference('notifications', {
+      ...this.user?.preferences.notifications,
+      dailyReminders
+    });
+    this.settingsService.updateNotifications({
       ...this.user?.preferences.notifications,
       dailyReminders
     });
@@ -212,6 +249,10 @@ export class SettingsPage implements OnInit, OnDestroy {
       ...this.user?.preferences.notifications,
       weeklyReports
     });
+    this.settingsService.updateNotifications({
+      ...this.user?.preferences.notifications,
+      weeklyReports
+    });
   }
 
   /**
@@ -220,41 +261,28 @@ export class SettingsPage implements OnInit, OnDestroy {
   async onBudgetThresholdChange(event: any): Promise<void> {
     const threshold = event.detail.value;
     await this.updatePreference('budgetAlertThreshold', threshold);
+    this.settingsService.updateBudgetAlertThreshold(threshold);
   }
 
   /**
    * Actualiza una preferencia del usuario
    */
   private async updatePreference(key: string, value: any): Promise<void> {
-   try {
-    if (key === 'notifications') {
-      await this.authService.updatePreferences({ notifications: value });
-    } else {
-      await this.authService.updatePreferences({ [key]: value });
-    }
+    try {
+      if (key === 'notifications') {
+        await this.authService.updatePreferences({ notifications: value });
+      } else {
+        await this.authService.updatePreferences({ [key]: value });
+      }
 
-    // ✅ Recargar usuario
-    await this.authService.reloadCurrentUser();
-    
-    await this.showToast('Configuración actualizada', 'success');
+      // Recargar usuario DESPUÉS de actualizar
+      await this.authService.reloadCurrentUser();
+      
+      await this.showToast('Configuración actualizada', 'success');
 
-  } catch (error: any) {
-    console.error('Error al actualizar preferencia:', error);
-    await this.showToast('Error al actualizar configuración', 'danger');
-  }
-}
-
-  /**
-   * Aplica el tema seleccionado
-   */
-  private applyTheme(theme: 'light' | 'dark' | 'auto'): void {
-    const isDark = theme === 'dark' || 
-                   (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    
-    if (isDark) {
-      document.body.setAttribute('color-scheme', 'dark');
-    } else {
-      document.body.setAttribute('color-scheme', 'light');
+    } catch (error: any) {
+      console.error('Error al actualizar preferencia:', error);
+      await this.showToast('Error al actualizar configuración', 'danger');
     }
   }
 
@@ -262,7 +290,6 @@ export class SettingsPage implements OnInit, OnDestroy {
    * Abre la política de privacidad
    */
   openPrivacyPolicy(): void {
-    // TODO: Implementar apertura de documento
     console.log('Abrir política de privacidad');
   }
 
@@ -270,13 +297,24 @@ export class SettingsPage implements OnInit, OnDestroy {
    * Abre los términos de servicio
    */
   openTermsOfService(): void {
-    // TODO: Implementar apertura de documento
     console.log('Abrir términos de servicio');
   }
+  async onSubmit(): Promise<void> {
+  if (!this.settingsForm?.valid) {
+    await this.showToast('Completa los campos requeridos', 'warning');
+    return;
+  }
 
-  /**
-   * Cierra la sesión del usuario
-   */
+  try {
+    const values = this.settingsForm.value;
+    await this.authService.updatePreferences(values);
+    await this.authService.reloadCurrentUser();
+    await this.showToast('Configuración guardada correctamente', 'success');
+  } catch (error: any) {
+    console.error('Error al guardar configuración:', error);
+    await this.showToast('Error al guardar configuración', 'danger');
+  }
+}
   async logout(): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Cerrar Sesión',
