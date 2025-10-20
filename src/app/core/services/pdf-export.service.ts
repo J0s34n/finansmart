@@ -3,10 +3,12 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
 
 /**
  * Servicio para exportar reportes a PDF
  * Maneja generación, almacenamiento y compartición de PDFs
+ * ✅ CORREGIDO: Detecta correctamente web vs mobile
  */
 @Injectable({
   providedIn: 'root'
@@ -311,34 +313,44 @@ export class PdfExportService {
 
   /**
    * Descarga el PDF
+   * 🔹 CORREGIDO: Detecta correctamente la plataforma
    */
   private async downloadPDF(pdf: jsPDF, fileName: string): Promise<void> {
     const timestamp = new Date().toISOString().slice(0, 10);
     const fullFileName = `${fileName}_${timestamp}.pdf`;
 
+    // 🔹 Detectar plataforma correctamente
+    const isNative = Capacitor.isNativePlatform();
+
+    console.log('🔍 Plataforma detectada:', isNative ? 'Nativa (iOS/Android)' : 'Web');
+
     // En web, usar descarga directa
-    if (!this.isPlatformCapacitor()) {
+    if (!isNative) {
+      console.log('📥 Descargando PDF en navegador...');
       pdf.save(fullFileName);
+      console.log('✅ PDF descargado:', fullFileName);
       return;
     }
 
     // En Capacitor (móvil), guardar en sistema de archivos
     try {
+      console.log('💾 Guardando PDF en sistema de archivos nativo...');
+      
       const pdfData = pdf.output('arraybuffer');
       const blob = new Blob([pdfData], { type: 'application/pdf' });
       const base64 = await this.blobToBase64(blob);
 
-      await Filesystem.writeFile({
+      const result = await Filesystem.writeFile({
         path: fullFileName,
         data: base64,
         directory: Directory.Documents,
         recursive: true
       });
 
-      console.log(`PDF guardado: ${fullFileName}`);
+      console.log('✅ PDF guardado en:', result.uri);
 
     } catch (error) {
-      console.error('Error al guardar PDF:', error);
+      console.error('❌ Error al guardar PDF:', error);
       throw error;
     }
   }
@@ -359,10 +371,11 @@ export class PdfExportService {
   }
 
   /**
-   * Detecta si está en plataforma Capacitor
+   * 🔹 DEPRECADO: Usar Capacitor.isNativePlatform() en su lugar
+   * Mantener por compatibilidad pero marcar como deprecado
    */
   private isPlatformCapacitor(): boolean {
-    return (window as any).Capacitor && (window as any).Capacitor.isPluginAvailable('Filesystem');
+    return Capacitor.isNativePlatform();
   }
 
   /**
@@ -370,7 +383,7 @@ export class PdfExportService {
    */
   async sharePDF(fileName: string, message: string): Promise<void> {
     try {
-      if ((window as any).Capacitor && (window as any).Capacitor.isPluginAvailable('Share')) {
+      if (Capacitor.isPluginAvailable('Share')) {
         await Share.share({
           title: 'Compartir Reporte',
           text: message,
@@ -378,7 +391,7 @@ export class PdfExportService {
           dialogTitle: 'Compartir Reporte'
         });
       } else {
-        console.warn('Función Share no disponible');
+        console.warn('Función Share no disponible en esta plataforma');
       }
     } catch (error) {
       console.error('Error al compartir PDF:', error);
