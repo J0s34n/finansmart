@@ -641,9 +641,32 @@ export class ReportsPage implements OnInit, OnDestroy {
       await this.showToast('Error al generar el PDF', 'danger');
     }
   }
-  showToast(arg0: string, arg1: string) {
-    throw new Error('Method not implemented.');
-  }
+// ✅ DESPUÉS (funcional)
+/**
+ * Muestra un toast con un mensaje
+ * @param message Mensaje a mostrar
+ * @param color Color del toast ('success', 'danger', 'warning', 'primary')
+ * @param duration Duración en milisegundos (default: 2000)
+ */
+async showToast(
+  message: string, 
+  color: 'success' | 'danger' | 'warning' | 'primary' = 'primary',
+  duration: number = 2000
+): Promise<void> {
+  const toast = await this.toastController.create({
+    message: message,
+    duration: duration,
+    color: color,
+    position: 'bottom',
+    buttons: [
+      {
+        text: 'OK',
+        role: 'cancel'
+      }
+    ]
+  });
+  await toast.present();
+}
 
   /**
    * Obtiene las secciones del reporte mensual
