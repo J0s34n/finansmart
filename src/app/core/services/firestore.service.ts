@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, runInInjectionContext, Injector } from '@angular/core';
 import { 
   Firestore, 
   doc, 
@@ -29,10 +29,12 @@ export interface BatchOperation {
  * Servicio centralizado para operaciones en Firestore.
  * - Usa exclusivamente helpers re-exportados por `@angular/fire/firestore`.
  * - Manejo consistente de errores y tipado.
+ * - CORREGIDO: Usa injector para evitar warnings de contexto
  */
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
-  constructor(private firestore: Firestore) {}
+  private firestore = inject(Firestore);
+  private injector = inject(Injector);
 
   /**
    * Obtiene un documento por ID como promesa (devuelve null si no existe)
@@ -40,7 +42,12 @@ export class FirestoreService {
   async getById<T = any>(collectionPath: string, documentId: string): Promise<T | null> {
     try {
       const ref = doc(this.firestore, `${collectionPath}/${documentId}`);
-      const data = await firstValueFrom(docData(ref, { idField: 'id' }));
+      
+      // 🔹 Ejecutar dentro del contexto de inyección
+      const data = await runInInjectionContext(this.injector, () => 
+        firstValueFrom(docData(ref, { idField: 'id' }))
+      );
+      
       return (data ?? null) as T | null;
     } catch (error) {
       console.error(`[FirestoreService] getById failed: ${collectionPath}/${documentId}`, error);
@@ -54,7 +61,12 @@ export class FirestoreService {
   async getAll<T = any>(collectionPath: string): Promise<T[]> {
     try {
       const colRef = collection(this.firestore, collectionPath);
-      const data = await firstValueFrom(collectionData(colRef, { idField: 'id' }));
+      
+      // 🔹 Ejecutar dentro del contexto de inyección
+      const data = await runInInjectionContext(this.injector, () =>
+        firstValueFrom(collectionData(colRef, { idField: 'id' }))
+      );
+      
       return (data ?? []) as T[];
     } catch (error) {
       console.error(`[FirestoreService] getAll failed: ${collectionPath}`, error);
@@ -69,7 +81,12 @@ export class FirestoreService {
     try {
       const colRef = collection(this.firestore, collectionPath);
       const q = query(colRef, ...queryConstraints);
-      const data = await firstValueFrom(collectionData(q as any, { idField: 'id' }));
+      
+      // 🔹 Ejecutar dentro del contexto de inyección
+      const data = await runInInjectionContext(this.injector, () =>
+        firstValueFrom(collectionData(q as any, { idField: 'id' }))
+      );
+      
       return (data ?? []) as T[];
     } catch (error) {
       console.error(`[FirestoreService] getWhere failed: ${collectionPath}`, error);
@@ -85,7 +102,11 @@ export class FirestoreService {
     try {
       const colRef = collection(this.firestore, collectionPath);
       const q = query(colRef, ...queryConstraints);
-      return collectionData(q as any, { idField: 'id' }) as Observable<T[]>;
+      
+      // 🔹 Ejecutar dentro del contexto de inyección
+      return runInInjectionContext(this.injector, () =>
+        collectionData(q as any, { idField: 'id' }) as Observable<T[]>
+      );
     } catch (error) {
       console.error(`[FirestoreService] watchQuery failed: ${collectionPath}`, error);
       throw error;
