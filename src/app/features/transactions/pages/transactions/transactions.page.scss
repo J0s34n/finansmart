@@ -48,7 +48,7 @@
         margin: 0 12px;
         transition: all 0.2s ease;
 
-        &: var(--ion-color-primary);
+        &:active {
           background-color: rgba(var(--ion-color-primary-rgb), 0.05);
         }
 
@@ -251,7 +251,7 @@
 // FAB BUTTON
 // ========================================
 ion-fab {
- var(--ion-color-primary);
+  ion-fab-button {
     --box-shadow: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
 
     &:active {
@@ -355,14 +355,14 @@ ion-fab {
   }
 
   .transactions-list {
- var(--ion-background-color);
+    .transactions-header {
       background-color: rgba(255, 255, 255, 0.05);
     }
 
- var(--ion-background-color);
+    ion-list ion-item-sliding ion-item {
       background-color: rgba(255, 255, 255, 0.05);
 
-      &: var(--ion-color-primary);
+      &:active {
         background-color: rgba(var(--ion-color-primary-rgb), 0.1);
       }
     }
@@ -374,7 +374,7 @@ ion-fab {
         border-bottom-color: rgba(255, 255, 255, 0.1);
       }
 
- var(--ion-background-color);
+      ion-item {
         background-color: rgba(255, 255, 255, 0.05);
       }
     }
