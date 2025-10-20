@@ -41,6 +41,11 @@
   --ion-background-color: #121212;
   --ion-text-color: #ffffff;
 }
+
+html, body, ion-content, ion-card, ion-toolbar, ion-item, ion-title {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /*@import "@ionic/angular/css/palettes/dark.class.css"; 
 /*@import '@ionic/angular/css/palettes/dark.system.css'; */

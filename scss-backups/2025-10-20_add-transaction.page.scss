@@ -54,7 +54,7 @@
 // ========================================
 .form-card {
   border-radius: 16px;
-  margin-bottom: var(--ion-shadow-color);
+  margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   animation: fadeInUp 0.4s ease-out;
 
@@ -201,7 +201,7 @@
       margin: 0;
       width: 36px;
       height: 36px;
-      border-radius: var(--ion-background-color);
+      border-radius: 8px;
       background: rgba(0, 0, 0, 0.5);
 
       ion-icon {

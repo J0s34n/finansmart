@@ -1,0 +1,242 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// ========================================
+// HEADER SECTION
+// ========================================
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.logo-icon {
+  font-size: 80px;
+  color: var(--ion-color-primary);
+  animation: bounce 1s ease-in-out;
+}
+
+.app-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin: 10px 0;
+}
+
+.app-subtitle {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+// ========================================
+// CARD
+// ========================================
+.login-card {
+  width: 100%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  animation: fadeInUp 0.6s ease-out;
+
+  ion-card-header {
+    padding-bottom: 10px;
+  }
+
+  ion-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  ion-card-content {
+    padding: 20px;
+  }
+}
+
+// ========================================
+// FORM
+// ========================================
+form {
+  ion-item {
+    --border-radius: 8px;
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+    }
+
+    ion-icon {
+      color: var(--ion-color-medium);
+      margin-right: 12px;
+    }
+  }
+
+  ion-input {
+    --padding-start: 0;
+  }
+}
+
+// ========================================
+// ERROR MESSAGES
+// ========================================
+.error-message {
+  padding: 4px 12px;
+  margin-bottom: 12px;
+  animation: fadeIn 0.3s ease-out;
+
+  small {
+    display: block;
+  }
+}
+
+// ========================================
+// FORGOT PASSWORD
+// ========================================
+.forgot-password-container {
+  text-align: right;
+  margin: 8px 0 20px;
+
+  ion-button {
+    font-size: 13px;
+    text-transform: none;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+// ========================================
+// BUTTONS
+// ========================================
+.login-button {
+  margin-top: 20px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  --border-radius: 8px;
+
+  ion-spinner {
+    margin: 0 8px;
+  }
+}
+
+// ========================================
+// REGISTER SECTION
+// ========================================
+.register-section {
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+  animation: fadeIn 0.8s ease-out;
+
+  p {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  ion-button {
+    --border-radius: 8px;
+    height: 48px;
+    font-weight: 600;
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+@media (max-width: 576px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .app-title {
+    font-size: 28px;
+  }
+
+  .logo-icon {
+    font-size: 60px;
+  }
+}
+
+// ========================================
+// DARK MODE
+// ========================================
+@media (prefers-color-scheme: dark) {
+  .login-card {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  form ion-item {
+    border-color: var(--ion-color-dark);
+
+    &.ion-valid {
+      border-color: var(--ion-color-success);
+    }
+
+    &.ion-invalid {
+      border-color: var(--ion-color-danger);
+    }
+  }
+}

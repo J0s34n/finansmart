@@ -1,0 +1,1114 @@
+Total de issues encontrados: 196
+
+REPORTE DE ANÁLISIS SCSS - 19/10/2025, 7:14:45 p.m.
+
+============================================================
+📄 ARCHIVO 1: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\forgot-password\forgot-password.page.scss
+============================================================
+
+[001] Línea 11
+  Propiedad: N/A
+  Variante detectada: secondary
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-color-secondary)
+
+[002] Línea 14
+  Propiedad: N/A
+  Variante detectada: light
+  Valor actual: #FAFAFA;
+  💡 Variable sugerida: var(--ion-color-light)
+
+[003] Línea 407
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[004] Línea 415
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[005] Línea 421
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[006] Línea 428
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[007] Línea 437
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[008] Línea 451
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[009] Línea 459
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 2: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\login\login.page.scss
+============================================================
+
+[010] Línea 49
+  Propiedad: box-shadow
+  Valor actual: 0 4px 16px rgba(0, 0, 0, 0.1);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[011] Línea 228
+  Propiedad: box-shadow
+  Valor actual: 0 4px 16px rgba(0, 0, 0, 0.3);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 3: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\profile\profile.page.scss
+============================================================
+
+[012] Línea 10
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: #212121;
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[013] Línea 15
+  Propiedad: N/A
+  Variante detectada: card
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-card-background)
+
+[014] Línea 102
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[015] Línea 214
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[016] Línea 294
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[017] Línea 298
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[018] Línea 350
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[019] Línea 417
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[020] Línea 438
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[021] Línea 549
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[022] Línea 553
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #1565C0 0%, #1976D2 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[023] Línea 557
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[024] Línea 564
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[025] Línea 567
+  Propiedad: background
+  Valor actual: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[026] Línea 572
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[027] Línea 577
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[028] Línea 584
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[029] Línea 588
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[030] Línea 594
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[031] Línea 597
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[032] Línea 602
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[033] Línea 607
+  Propiedad: border-color
+  Valor actual: #333333;
+  💡 Variable sugerida: var(--ion-border-color)
+
+[034] Línea 611
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[035] Línea 615
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[036] Línea 620
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[037] Línea 628
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[038] Línea 633
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 4: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\register\register.page.scss
+============================================================
+
+[039] Línea 48
+  Propiedad: box-shadow
+  Valor actual: 0 4px 16px rgba(0, 0, 0, 0.1);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[040] Línea 268
+  Propiedad: box-shadow
+  Valor actual: 0 4px 16px rgba(0, 0, 0, 0.3);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 5: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\settings\settings.page.scss
+============================================================
+
+[041] Línea 8
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: #212121;
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[042] Línea 13
+  Propiedad: N/A
+  Variante detectada: card
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-card-background)
+
+[043] Línea 103
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[044] Línea 346
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[045] Línea 350
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[046] Línea 353
+  Propiedad: background
+  Valor actual: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[047] Línea 357
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[048] Línea 362
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[049] Línea 371
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[050] Línea 375
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[051] Línea 379
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[052] Línea 383
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[053] Línea 422
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[054] Línea 427
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 6: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\auth\pages\verify-email\verify-email.page.scss
+============================================================
+
+[055] Línea 10
+  Propiedad: N/A
+  Variante detectada: secondary
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-color-secondary)
+
+[056] Línea 13
+  Propiedad: N/A
+  Variante detectada: light
+  Valor actual: #FAFAFA;
+  💡 Variable sugerida: var(--ion-color-light)
+
+[057] Línea 91
+  Propiedad: background-color
+  Valor actual: rgba(76, 175, 80, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[058] Línea 161
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[059] Línea 213
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[060] Línea 258
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[061] Línea 338
+  Propiedad: color
+  Valor actual: #F44336;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[062] Línea 344
+  Propiedad: color
+  Valor actual: #F44336;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[063] Línea 431
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[064] Línea 435
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[065] Línea 440
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[066] Línea 444
+  Propiedad: background-color
+  Valor actual: rgba(76, 175, 80, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[067] Línea 449
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #004D40 0%, #00695C 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[068] Línea 453
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[069] Línea 459
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[070] Línea 462
+  Propiedad: background
+  Valor actual: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[071] Línea 466
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[072] Línea 471
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[073] Línea 475
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[074] Línea 480
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[075] Línea 489
+  Propiedad: background-color
+  Valor actual: #1976D2;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[076] Línea 493
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[077] Línea 497
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[078] Línea 503
+  Propiedad: background-color
+  Valor actual: rgba(244, 67, 54, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[079] Línea 511
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[080] Línea 516
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 7: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\budgets\pages\add-budget\add-budget.page.scss
+============================================================
+
+[081] Línea 14
+  Propiedad: box-shadow
+  Valor actual: 0 2px 8px rgba(0, 0, 0, 0.05);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[082] Línea 85
+  Propiedad: background-color
+  Variante detectada: primary
+  Valor actual: rgba(var(--ion-color-primary-rgb), 0.1);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[083] Línea 176
+  Propiedad: background
+  Variante detectada: success
+  Valor actual: linear-gradient(135deg, rgba(var(--ion-color-primary-rgb), 0.05), rgba(var(--ion-color-success-rgb), 0.05));
+  💡 Variable sugerida: var(--ion-color-success)
+
+[084] Línea 197
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: 1px solid rgba(var(--ion-color-primary-rgb), 0.1);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 8: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\budgets\pages\budgets\budgets.page.scss
+============================================================
+
+[085] Línea 33
+  Propiedad: box-shadow
+  Valor actual: 0 2px 8px rgba(0, 0, 0, 0.05);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[086] Línea 170
+  Propiedad: background-color
+  Variante detectada: primary
+  Valor actual: rgba(var(--ion-color-primary-rgb), 0.02);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[087] Línea 356
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[088] Línea 498
+  Propiedad: box-shadow
+  Valor actual: 0 2px 8px rgba(0, 0, 0, 0.3);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[089] Línea 501
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[090] Línea 510
+  Propiedad: border-color
+  Valor actual: rgba(255, 255, 255, 0.1);
+  💡 Variable sugerida: var(--ion-border-color)
+
+[091] Línea 520
+  Propiedad: border-color
+  Valor actual: rgba(255, 255, 255, 0.1);
+  💡 Variable sugerida: var(--ion-border-color)
+
+[092] Línea 523
+  Propiedad: background-color
+  Variante detectada: primary
+  Valor actual: rgba(var(--ion-color-primary-rgb), 0.05);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 9: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\dashboard\pages\dashboard\dashboard.page.scss
+============================================================
+
+[093] Línea 82
+  Propiedad: box-shadow
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.3);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[094] Línea 110
+  Propiedad: color
+  Valor actual: #ff6b6b;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[095] Línea 114
+  Propiedad: color
+  Valor actual: #51cf66;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[096] Línea 126
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[097] Línea 136
+  Propiedad: background-color
+  Valor actual: rgba(81, 207, 102, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[098] Línea 141
+  Propiedad: background-color
+  Valor actual: rgba(255, 107, 107, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[099] Línea 411
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[100] Línea 523
+  Propiedad: box-shadow
+  Valor actual: 0 8px 24px rgba(0, 0, 0, 0.4);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[101] Línea 527
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[102] Línea 531
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[103] Línea 535
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[104] Línea 682
+  Propiedad: box-shadow
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.3);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[105] Línea 710
+  Propiedad: color
+  Valor actual: #ff6b6b;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[106] Línea 714
+  Propiedad: color
+  Valor actual: #51cf66;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[107] Línea 726
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[108] Línea 736
+  Propiedad: background-color
+  Valor actual: rgba(81, 207, 102, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[109] Línea 741
+  Propiedad: background-color
+  Valor actual: rgba(255, 107, 107, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[110] Línea 1011
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[111] Línea 1123
+  Propiedad: box-shadow
+  Valor actual: 0 8px 24px rgba(0, 0, 0, 0.4);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[112] Línea 1127
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[113] Línea 1131
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[114] Línea 1135
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 10: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\reports\pages\reports\reports.page.scss
+============================================================
+
+[115] Línea 12
+  Propiedad: N/A
+  Variante detectada: secondary
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-color-secondary)
+
+[116] Línea 15
+  Propiedad: N/A
+  Variante detectada: light
+  Valor actual: #FAFAFA;
+  💡 Variable sugerida: var(--ion-color-light)
+
+[117] Línea 197
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[118] Línea 291
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[119] Línea 358
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[120] Línea 403
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.08);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[121] Línea 476
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[122] Línea 531
+  Propiedad: color
+  Valor actual: #F97316;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[123] Línea 571
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.5);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[124] Línea 617
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.08);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[125] Línea 713
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[126] Línea 720
+  Propiedad: background
+  Valor actual: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[127] Línea 724
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[128] Línea 729
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[129] Línea 738
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[130] Línea 742
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[131] Línea 748
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[132] Línea 751
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[133] Línea 755
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[134] Línea 759
+  Propiedad: color
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[135] Línea 765
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[136] Línea 769
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[137] Línea 774
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[138] Línea 778
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[139] Línea 783
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[140] Línea 786
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[141] Línea 790
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[142] Línea 796
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[143] Línea 799
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[144] Línea 803
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[145] Línea 807
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[146] Línea 816
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[147] Línea 821
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[148] Línea 829
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 11: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\transactions\pages\add-transaction\add-transaction.page.scss
+============================================================
+
+[149] Línea 58
+  Propiedad: box-shadow
+  Valor actual: 0 2px 8px rgba(0, 0, 0, 0.05);
+  💡 Variable sugerida: var(--ion-shadow-color)
+
+[150] Línea 205
+  Propiedad: background
+  Valor actual: rgba(0, 0, 0, 0.5);
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 12: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\transactions\pages\transaction-detail\transaction-detail.page.scss
+============================================================
+
+[151] Línea 12
+  Propiedad: N/A
+  Variante detectada: secondary
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-color-secondary)
+
+[152] Línea 17
+  Propiedad: N/A
+  Variante detectada: card
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-card-background)
+
+[153] Línea 109
+  Propiedad: background
+  Variante detectada: card
+  Valor actual: linear-gradient(135deg, $bg-card 0%, #F5F5F5 100%);
+  💡 Variable sugerida: var(--ion-card-background)
+
+[154] Línea 184
+  Propiedad: background-color
+  Valor actual: #E3F2FD;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[155] Línea 232
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[156] Línea 308
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.08);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[157] Línea 368
+  Propiedad: background
+  Variante detectada: light
+  Valor actual: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
+  💡 Variable sugerida: var(--ion-color-light)
+
+[158] Línea 452
+  Propiedad: background-color
+  Valor actual: #E3F2FD;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[159] Línea 461
+  Propiedad: background-color
+  Valor actual: #BBDEFB;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[160] Línea 494
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.08);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[161] Línea 518
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.2);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[162] Línea 633
+  Propiedad: background-color
+  Valor actual: #121212;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[163] Línea 638
+  Propiedad: background
+  Valor actual: linear-gradient(135deg, #1E1E1E 0%, #2C2C2C 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[164] Línea 647
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[165] Línea 651
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[166] Línea 655
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[167] Línea 660
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[168] Línea 667
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[169] Línea 670
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.1);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[170] Línea 674
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[171] Línea 678
+  Propiedad: color
+  Valor actual: #757575;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[172] Línea 683
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[173] Línea 686
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[174] Línea 690
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[175] Línea 694
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[176] Línea 700
+  Propiedad: background
+  Valor actual: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[177] Línea 704
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[178] Línea 709
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+[179] Línea 714
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[180] Línea 718
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[181] Línea 722
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[182] Línea 724
+  Propiedad: border-color
+  Valor actual: #64B5F6;
+  💡 Variable sugerida: var(--ion-border-color)
+
+[183] Línea 727
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.25);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[184] Línea 732
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[185] Línea 735
+  Propiedad: background-color
+  Valor actual: rgba(33, 150, 243, 0.15);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[186] Línea 739
+  Propiedad: color
+  Valor actual: #B0B0B0;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[187] Línea 743
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[188] Línea 752
+  Propiedad: color
+  Valor actual: #FFFFFF;
+  💡 Variable sugerida: var(--ion-text-color)
+
+[189] Línea 757
+  Propiedad: background-color
+  Valor actual: #1E1E1E;
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 13: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\features\transactions\pages\transactions\transactions.page.scss
+============================================================
+
+[190] Línea 52
+  Propiedad: background-color
+  Variante detectada: primary
+  Valor actual: rgba(var(--ion-color-primary-rgb), 0.05);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[191] Línea 255
+  Propiedad: N/A
+  Variante detectada: primary
+  Valor actual: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[192] Línea 359
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[193] Línea 363
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+[194] Línea 366
+  Propiedad: background-color
+  Variante detectada: primary
+  Valor actual: rgba(var(--ion-color-primary-rgb), 0.1);
+  💡 Variable sugerida: var(--ion-color-primary)
+
+[195] Línea 378
+  Propiedad: background-color
+  Valor actual: rgba(255, 255, 255, 0.05);
+  💡 Variable sugerida: var(--ion-background-color)
+
+  ✅ AUTO-FIJADO
+
+
+============================================================
+📄 ARCHIVO 14: C:\Users\angel\OneDrive\Documentos\10mo\finansmart\src\app\home\home.page.scss
+============================================================
+
+[196] Línea 20
+  Propiedad: color
+  Valor actual: #8c8c8c;
+  💡 Variable sugerida: var(--ion-text-color)
+
+  ✅ AUTO-FIJADO

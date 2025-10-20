@@ -2,15 +2,15 @@
 // VARIABLES Y PALETA DE COLORES
 // ==========================================
 
-$primary-color: var(--ion-color-primary);
-$danger-color: var(--ion-color-danger);
+$primary-color: #2196F3;
+$danger-color: #F44336;
 
-$text-primary: var(--ion-color-text);
+$text-primary: #212121;
 $text-secondary: #757575;
 $text-hint: #BDBDBD;
 
-$bg-light: var(--ion-color-light);
-$bg-card: var(--ion-color-card);
+$bg-light: #FAFAFA;
+$bg-card: #FFFFFF;
 $bg-overlay: rgba(0, 0, 0, 0.04);
 
 $border-color: #E0E0E0;
@@ -339,15 +339,15 @@ ion-card {
 
 @media (prefers-color-scheme: dark) {
   :host {
-    --background: var(--background);
+    --background: #121212;
   }
 
   .settings-container {
-    background-color: var(--background);
+    background-color: #121212;
   }
 
   .settings-card {
-    background-color: var(--background);
+    background-color: #1E1E1E;
 
     ion-card-header {
       background: linear-gradient(90deg, #1E1E1E 0%, #262626 100%);

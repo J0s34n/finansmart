@@ -2,18 +2,18 @@
 // VARIABLES Y PALETA DE COLORES
 // ==========================================
 
-$primary-color: var(--ion-color-primary);
-$success-color: var(--ion-color-success);
-$danger-color: var(--ion-color-danger);
-$warning-color: var(--ion-color-warning);
-$info-color: var(--ion-color-secondary);
+$primary-color: #2196F3;
+$success-color: #4CAF50;
+$danger-color: #F44336;
+$warning-color: #FFC107;
+$info-color: #00BCD4;
 
 $text-primary: #212121;
 $text-secondary: #757575;
 $text-hint: #BDBDBD;
 
-$bg-light: var(--ion-color-light);
-$bg-card: var(--ion-card-background-color);
+$bg-light: #FAFAFA;
+$bg-card: #FFFFFF;
 $bg-overlay: rgba(0, 0, 0, 0.04);
 
 $border-color: #E0E0E0;
@@ -26,12 +26,10 @@ $spacing-sm: 8px;
 $spacing-md: 16px;
 $spacing-lg: 24px;
 $spacing-xl: 32px;
-$spacing-xxl: 40px;
 
 $radius-sm: 4px;
 $radius-md: 8px;
 $radius-lg: 12px;
-$radius-xl: 16px;
 
 $transition-duration: 300ms;
 $transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
@@ -100,13 +98,13 @@ ion-content {
 // ==========================================
 
 .month-selector-card {
-  border-radius: $radius-xl;
+  border-radius: $radius-lg;
   box-shadow: $shadow-elevation-2;
   border: none;
   overflow: hidden;
 
   ion-card-content {
-    padding: $spacing-xxl;
+    padding: $spacing-lg;
   }
 }
 
@@ -712,7 +710,7 @@ ion-progress-bar {
   }
 
   .reports-container {
-    background-color: var(--background);
+    background-color: #121212;
   }
 
   .month-selector-card,
@@ -728,7 +726,7 @@ ion-progress-bar {
     }
 
     ion-card-content {
-      background-color: var(--ion-card-background-color);
+      background-color: #1E1E1E;
     }
   }
 
@@ -737,7 +735,7 @@ ion-progress-bar {
 
     .month-display {
       h3 {
-        color: var(--ion-color-primary);
+        color: #FFFFFF;
       }
 
       .month-subtitle {
@@ -811,16 +809,16 @@ ion-progress-bar {
   }
 
   ion-header ion-toolbar {
-    --background: var(--ion-card-background-color);
-    --border-bottom: 1px solid var(--ion-color-dark-shade);
+    --background: #1E1E1E;
+    --border-bottom: 1px solid #333333;
 
     ion-title {
-      color: var(--ion-color-light);
+      color: #FFFFFF;
     }
   }
 
   ion-card {
-    background-color: var(--ion-card-dark);
+    background-color: #1E1E1E;
   }
 
   ion-segment {

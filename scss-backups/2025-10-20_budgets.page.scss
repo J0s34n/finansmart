@@ -1,0 +1,583 @@
+.budgets-container {
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-out;
+}
+
+// ========================================
+// MONTH HEADER
+// ========================================
+.month-header {
+  margin-bottom: 24px;
+  animation: fadeInDown 0.4s ease-out;
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--ion-text-color);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
+}
+
+// ========================================
+// SUMMARY CARD
+// ========================================
+.summary-card {
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.4s ease-out;
+
+  ion-card-content {
+    padding: 20px;
+  }
+
+  ion-grid {
+    padding: 0;
+
+    ion-row {
+      margin-bottom: 16px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      ion-col {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    background-color: var(--ion-color-light);
+    border-radius: 12px;
+    text-align: center;
+
+    .label {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      font-weight: 500;
+    }
+
+    .value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ion-text-color);
+
+      &.success {
+        color: var(--ion-color-success);
+      }
+
+      &.danger {
+        color: var(--ion-color-danger);
+      }
+
+      &.warning {
+        color: var(--ion-color-warning);
+      }
+    }
+  }
+
+  .alerts-section {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ion-color-light);
+
+    ion-chip {
+      font-size: 12px;
+
+      ion-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// ========================================
+// FILTERS SEGMENT
+// ========================================
+.filters-segment {
+  --background: transparent;
+  margin-bottom: 20px;
+  margin-left: -16px;
+  margin-right: -16px;
+  padding: 0 16px;
+  display: flex;
+  overflow-x: auto;
+
+  ion-segment-button {
+    --border-width: 0;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 20px;
+    margin-right: 8px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &.segment-button-checked {
+      border-color: var(--ion-color-primary);
+      background: var(--ion-color-primary);
+      color: white;
+    }
+  }
+}
+
+// ========================================
+// BUDGETS LIST
+// ========================================
+.budgets-list {
+  animation: fadeIn 0.4s ease-out;
+
+  .budgets-header {
+    padding: 12px 0;
+    background-color: var(--ion-color-light);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+    margin-bottom: 12px;
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+
+    .budget-item {
+      margin-bottom: 12px;
+
+      ion-item {
+        --padding-start: 12px;
+        --inner-padding-end: 12px;
+        background-color: transparent;
+        border: 1px solid var(--ion-color-light);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+
+        &:active {
+          border-color: var(--ion-color-primary);
+          background-color: rgba(var(--ion-color-primary-rgb), 0.02);
+        }
+
+        .budget-content {
+          display: flex;
+          gap: 12px;
+          width: 100%;
+          padding: 12px 0;
+
+          .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+
+            ion-icon {
+              font-size: 24px;
+            }
+          }
+
+          .budget-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .budget-header-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0;
+              }
+
+              ion-badge {
+                font-size: 11px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+
+                ion-icon {
+                  font-size: 12px;
+                }
+              }
+            }
+
+            .progress-section {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+
+              ion-progress-bar {
+                flex: 1;
+                border-radius: 4px;
+                height: 6px;
+              }
+
+              .percentage {
+                font-size: 12px;
+                font-weight: 600;
+                min-width: 35px;
+                text-align: right;
+              }
+            }
+
+            .amounts-row {
+              display: flex;
+              gap: 8px;
+              font-size: 12px;
+
+              .amount {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+
+                small {
+                  color: var(--ion-color-medium);
+                }
+
+                strong {
+                  font-weight: 600;
+                  color: var(--ion-text-color);
+                }
+
+                &.positive strong {
+                  color: var(--ion-color-success);
+                }
+
+                &.negative strong {
+                  color: var(--ion-color-danger);
+                }
+              }
+            }
+
+            .alert-chip {
+              align-self: flex-start;
+              font-size: 11px;
+              margin-top: 4px;
+
+              ion-icon {
+                margin-right: 2px;
+              }
+            }
+          }
+        }
+      }
+
+      ion-item-options {
+        ion-item-option {
+          font-size: 12px;
+
+          ion-icon {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================================
+// EMPTY STATE
+// ========================================
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px 20px;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+
+  ion-icon {
+    font-size: 80px;
+    color: var(--ion-color-medium);
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+}
+
+// ========================================
+// LOADING STATE
+// ========================================
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+
+  ion-spinner {
+    --color: var(--ion-color-primary);
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
+}
+
+// ========================================
+// FAB BUTTON
+// ========================================
+ion-fab {
+  ion-fab-button {
+    --box-shadow: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// ========================================
+// ANIMATIONS
+// ========================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ========================================
+// RESPONSIVE
+// ========================================
+@media (max-width: 576px) {
+  .budgets-container {
+    padding: 0;
+  }
+
+  ion-content {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+
+  .month-header {
+    h2 {
+      font-size: 24px;
+    }
+  }
+
+  .summary-card ion-card-content {
+    padding: 16px;
+  }
+
+  .summary-item {
+    padding: 10px;
+
+    .label {
+      font-size: 11px;
+    }
+
+    .value {
+      font-size: 16px;
+    }
+  }
+
+  .filters-segment {
+    margin-left: -12px;
+    margin-right: -12px;
+    padding: 0 12px;
+
+    ion-segment-button {
+      font-size: 12px;
+    }
+  }
+
+  .budgets-list {
+    .budget-item .budget-content {
+      padding: 10px 0;
+
+      .category-icon {
+        width: 40px;
+        height: 40px;
+
+        ion-icon {
+          font-size: 20px;
+        }
+      }
+
+      .budget-info {
+        gap: 6px;
+
+        .budget-header-row h3 {
+          font-size: 14px;
+        }
+
+        .progress-section {
+          gap: 6px;
+
+          .percentage {
+            font-size: 11px;
+          }
+        }
+
+        .amounts-row {
+          gap: 6px;
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    min-height: 300px;
+    padding: 30px 16px;
+
+    ion-icon {
+      font-size: 60px;
+    }
+
+    h3 {
+      font-size: 18px;
+    }
+  }
+}
+
+// ========================================
+// DARK MODE
+// ========================================
+@media (prefers-color-scheme: dark) {
+  .summary-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    .summary-item {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .alerts-section {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .filters-segment ion-segment-button {
+    border-color: rgba(255, 255, 255, 0.1);
+
+    &.segment-button-checked {
+      border-color: var(--ion-color-primary);
+      box-shadow: 0 0 0 1px var(--ion-color-primary);
+    }
+  }
+
+  .budgets-list {
+    .budget-item ion-item {
+      border-color: rgba(255, 255, 255, 0.1);
+
+      &:active {
+        background-color: rgba(var(--ion-color-primary-rgb), 0.05);
+      }
+    }
+  }
+}
+
+// ========================================
+// TRANSITIONS
+// ========================================
+ion-item {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+ion-button {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+ion-progress-bar {
+  transition: all 0.3s ease;
+}
+
+// ========================================
+// SCROLLBAR STYLING
+// ========================================
+.filters-segment {
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 2px;
+
+    &:hover {
+      background: var(--ion-color-medium-shade);
+    }
+  }
+}
+
+// ========================================
+// UTILITY CLASSES
+// ========================================
+.ion-text-success {
+  color: var(--ion-color-success);
+}
+
+.ion-text-danger {
+  color: var(--ion-color-danger);
+}
+
+.ion-text-warning {
+  color: var(--ion-color-warning);
+}
