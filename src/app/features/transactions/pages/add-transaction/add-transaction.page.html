@@ -13,11 +13,11 @@
     <!-- Tipo de Transacción (Ingreso/Gasto) -->
     <ion-card class="type-card">
       <ion-segment [value]="transactionType" (ionChange)="onTransactionTypeChange($event)">
-        <ion-segment-button [value]="'expense'" [disabled]="isLoading">
+        <ion-segment-button [value]="'expense'" >
           <ion-icon name="arrow-down-outline"></ion-icon>
           <span>Gasto</span>
         </ion-segment-button>
-        <ion-segment-button [value]="'income'" [disabled]="isLoading">
+        <ion-segment-button [value]="'income'" >
           <ion-icon name="arrow-up-outline"></ion-icon>
           <span>Ingreso</span>
         </ion-segment-button>
@@ -72,7 +72,7 @@
               [compareWith]="compareCategories"
               [value]="selectedCategory?.id"
               placeholder="Selecciona una categoría"
-              [disabled]="isLoading">
+              >
               <ion-select-option 
                 *ngFor="let category of categories"
                 [value]="category.id"
@@ -115,7 +115,7 @@
               placeholder="Ej: Supermercado, Salario, etc."
               label="Qué compraste o recibiste"
               labelPlacement="floating"
-              [disabled]="isLoading">
+              >
             </ion-input>
           </ion-item>
 
@@ -140,7 +140,6 @@
               placeholder="Agrega detalles adicionales..."
               label="Notas"
               labelPlacement="floating"
-              [disabled]="isLoading"
               rows="3">
             </ion-textarea>
           </ion-item>
@@ -162,7 +161,7 @@
               type="date"
               label="Fecha de la transacción"
               labelPlacement="floating"
-              [disabled]="isLoading">
+              >
             </ion-input>
           </ion-item>
 

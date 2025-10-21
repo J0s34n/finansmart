@@ -105,6 +105,8 @@ export class AddTransactionPage implements OnInit, OnDestroy {
   isLoading = false;
   isUploading = false;
 
+  private formDisabled = false;
+
 /**
  * Compara categorías por ID
  */
@@ -333,6 +335,7 @@ compareCategories(c1: CategoryModel, c2: CategoryModel): boolean {
 
     await loading.present();
     this.isLoading = true;
+    this.disableForm();
 
     try {
       const { amount, description, notes, date } = this.transactionForm.value;
@@ -361,6 +364,7 @@ compareCategories(c1: CategoryModel, c2: CategoryModel): boolean {
       await this.transactionService.addTransaction(transaction);
 
       await loading.dismiss();
+      this.enableForm();
       await this.showToast('Transacción guardada correctamente!', 'success');
 
       // Redirigir al dashboard
@@ -491,4 +495,26 @@ compareCategories(c1: CategoryModel, c2: CategoryModel): boolean {
   getTransactionTypeIcon(): string {
     return this.transactionType === CategoryType.EXPENSE ? 'arrow-down-outline' : 'arrow-up-outline';
   }
+/**
+ * Deshabilita todos los controles del formulario
+ */
+private disableForm(): void {
+  if (!this.formDisabled) {
+    Object.keys(this.transactionForm.controls).forEach(key => {
+      this.transactionForm.get(key)?.disable();
+    });
+    this.formDisabled = true;
+  }
+}
+/**
+ * Habilita todos los controles del formulario
+ */
+private enableForm(): void {
+  if (this.formDisabled) {
+    Object.keys(this.transactionForm.controls).forEach(key => {
+      this.transactionForm.get(key)?.enable();
+    });
+    this.formDisabled = false;
+  }
+}
 }

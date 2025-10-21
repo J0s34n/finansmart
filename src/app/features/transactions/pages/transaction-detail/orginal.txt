@@ -8,12 +8,12 @@ $danger-color: #F44336;
 $warning-color: #FFC107;
 $info-color: #00BCD4;
 
-$text-primary: var(--ion-color-secondary);
+$text-primary: #212121;
 $text-secondary: #757575;
 $text-hint: #BDBDBD;
 $text-disabled: #EEEEEE;
 
-$bg-light: var(--ion-card-background);
+$bg-light: #FAFAFA;
 $bg-card: #FFFFFF;
 $bg-overlay: rgba(0, 0, 0, 0.04);
 
@@ -105,7 +105,7 @@ ion-content {
   border: none;
 
   ion-card-content {
-    padding: var(--ion-card-background);
+    padding: $spacing-lg;
     background: linear-gradient(135deg, $bg-card 0%, #F5F5F5 100%);
   }
 }
@@ -180,7 +180,7 @@ ion-content {
     .age-badge {
       display: inline-block;
       margin-top: $spacing-xs;
-      padding: var(--ion-background-color);
+      padding: 4px $spacing-sm;
       background-color: #E3F2FD;
       color: $primary-color;
       border-radius: $radius-sm;
@@ -364,7 +364,7 @@ ion-content {
   }
 
   ion-card-header {
-    padding: var(--ion-color-light);
+    padding: $spacing-md $spacing-lg;
     background: linear-gradient(90deg, #F5F5F5 0%, $bg-light 100%);
     border-bottom: 1px solid $border-color;
     display: flex;
@@ -448,8 +448,8 @@ ion-content {
   flex-wrap: wrap;
   gap: $spacing-sm;
 
- ion
- ion-chip {    background-color: var(--ion-background-color);
+  ion-chip {
+    background-color: #E3F2FD;
     color: $primary-color;
     font-size: 13px;
     padding: 6px $spacing-md;
@@ -490,7 +490,7 @@ ion-grid {
       border-radius: $radius-md;
       transition: all $transition-duration $transition-timing;
 
-      &:hover { 
+      &:hover {
         background-color: rgba(33, 150, 243, 0.08);
       }
 
@@ -629,12 +629,12 @@ ion-card {
     --background: #121212;
   }
 
- .transaction-detail-container {
+  .transaction-detail-container {
     background-color: #121212;
   }
 
   .main-card {
- ion-card-content {
+    ion-card-content {
       background: linear-gradient(135deg, #1E1E1E 0%, #2C2C2C 100%);
     }
   }
@@ -643,20 +643,20 @@ ion-card {
     border-bottom-color: #333333;
 
     .header-info {
- h2 {
+      h2 {
         color: #FFFFFF;
       }
 
-p {
+      p {
         color: #B0B0B0;
       }
 
-.category-name {
+      .category-name {
         background-color: rgba(33, 150, 243, 0.15);
         color: #64B5F6;
       }
 
- .age-badge {
+      .age-badge {
         background-color: rgba(33, 150, 243, 0.15);
         color: #64B5F6;
       }
